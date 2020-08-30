@@ -21,6 +21,8 @@ public class App extends JFrame implements Runnable{
         }
     }
 
+    public static boolean fullscrean;
+
     private int status;
     public final static int WIDTH = 1280, HEIGHT = 720;
     private final static String TITLE = "Settler game";
@@ -31,6 +33,9 @@ public class App extends JFrame implements Runnable{
     private OptionsPane optionPane;
     private MenuPanel menuPanel;
     public static boolean RUNNING;
+    private GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+
+    public static boolean isFullscrean() {return fullscrean;}
 
 
     public static void main(String[] args){
@@ -38,10 +43,26 @@ public class App extends JFrame implements Runnable{
         mainThread.start();
     }
 
+    private void config(){
+        fullscrean = true;
+    }
+
+    private void changeFullScrean(){
+        if(fullscrean) {
+            device.setFullScreenWindow(null);
+            fullscrean = false;
+            return;
+        }
+        else{
+            device.setFullScreenWindow(this);
+            fullscrean = true;
+        }
+        changeStatus(3);
+    }
+
     public App(){
         status = 0;
         RUNNING = true;
-        GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         this.setResizable(false);
         this.setTitle(TITLE);
         this.setUndecorated(true);
@@ -53,6 +74,7 @@ public class App extends JFrame implements Runnable{
         pack();
         device.setFullScreenWindow(this);
         System.out.println(this.getSize());
+        config();
     }
 
     private void removeC(){
@@ -114,9 +136,12 @@ public class App extends JFrame implements Runnable{
         }
         menuPanel.update();
         menuPanel.repaint();
-        if (menuPanel.getStatus() != 0) {
-            changeStatus(menuPanel.getStatus());
+        int menuStatus = menuPanel.getStatus();
+        int menuOptional = menuPanel.getOptionalStatus();
+        if (menuStatus != 0) {
+            changeStatus(menuStatus);
         }
+
     }
 
     // state 1
@@ -143,9 +168,13 @@ public class App extends JFrame implements Runnable{
     private void optiopUpdate(){
         optionPane.update();
         optionPane.draw();
+        int optionOptional = optionPane.getOptionalStatus();
         if(optionPane.getStatus() == -1){
             //optionPane = null;
             changeStatus(0);
+        }
+        if(optionOptional == 1){
+            changeFullScrean();
         }
     }
 

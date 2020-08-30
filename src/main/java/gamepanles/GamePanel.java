@@ -8,10 +8,11 @@ import java.awt.*;
 public class GamePanel extends JPanel implements GamePanel2D{
 
     private final int WIDTH, HEIGHT;
-    private int status;
+    private int status,optionalStatus;
     private ExitListener exitListener;
 
     public GamePanel(int width, int height){
+        optionalStatus = 0;
         this.setSize(width, height);
         this.WIDTH = width;
         this.HEIGHT = height;
@@ -42,5 +43,10 @@ public class GamePanel extends JPanel implements GamePanel2D{
     @Override
     public int getStatus() {
         return status;
+    }
+
+    @Override
+    public int getOptionalStatus() {
+        return optionalStatus;
     }
 }

@@ -8,12 +8,13 @@ import java.awt.event.ActionListener;
 public class MenuPanel extends JPanel implements GamePanel2D{
 
     private final int WIDTH, HEIGHT;
-    private int status = 0;
+    private int status = 0,optionalStatus;
 
     private JButton[] buttons;
     private final String[] buttonsText = {"Start Game", "Map Editor", "Optios", "Exit"};
 
     public MenuPanel(int width, int height){
+        optionalStatus = 0;
         WIDTH = width;
         HEIGHT = height;
         this.setSize(width, height);
@@ -66,5 +67,10 @@ public class MenuPanel extends JPanel implements GamePanel2D{
     @Override
     public int getStatus() {
         return status;
+    }
+
+    @Override
+    public int getOptionalStatus() {
+        return optionalStatus;
     }
 }

@@ -8,10 +8,11 @@ import java.awt.*;
 public class EditorPane extends JPanel implements GamePanel2D {
 
     private final int WIDTH, HEIGHT;
-    private int status;
+    private int status,optionalStatus;
     private ExitListener exitListener;
 
     public EditorPane(int width, int height){
+        optionalStatus = 0;
         this.WIDTH = width;
         this.HEIGHT = height;
         status = 0;
@@ -41,5 +42,10 @@ public class EditorPane extends JPanel implements GamePanel2D {
     @Override
     public int getStatus() {
         return status;
+    }
+
+    @Override
+    public int getOptionalStatus() {
+        return optionalStatus;
     }
 }
