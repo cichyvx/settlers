@@ -13,7 +13,7 @@ public class OptionsPane extends JPanel implements GamePanel2D {
     private int status,optionalStatus;
     private ExitListener exitListener;
 
-    private JButton fullscsreen;
+    private JButton fullscsreen, dimension;
 
     public OptionsPane(int width, int height){
         optionalStatus = 0;
@@ -24,12 +24,20 @@ public class OptionsPane extends JPanel implements GamePanel2D {
         exitListener = new ExitListener();
         addKeyListener(exitListener);
 
-        fullscsreen = new JButton(String.valueOf(App.isFullscrean()));
+        fullscsreen = new JButton("Fullscrean: " + App.isFullscrean());
+        dimension = new JButton(App.getDimension().width+" x "+App.getDimension().height);
+
         fullscsreen.addActionListener( (e) ->{
             this.requestFocus();
             optionalStatus = 1;
         });
 
+        dimension.addActionListener((e) -> {
+            this.requestFocus();
+            optionalStatus = 2;
+        });
+
+        this.add(dimension);
         this.add(fullscsreen);
 
     }

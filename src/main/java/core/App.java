@@ -22,11 +22,11 @@ public class App extends JFrame implements Runnable{
     }
 
     public static boolean fullscrean;
+    private static int dimension;
 
     private int status;
-    public final static int WIDTH = 1280, HEIGHT = 720;
     private final static String TITLE = "Settler game";
-    public static final Dimension appDim = new Dimension(WIDTH, HEIGHT);
+    public static final Dimension[] dimensins = new Dimension[3];
     private final short updateTime = 15;
     private GamePanel gamePanel;
     private EditorPane editorPanel;
@@ -37,6 +37,21 @@ public class App extends JFrame implements Runnable{
 
     public static boolean isFullscrean() {return fullscrean;}
 
+    public static Dimension getDimension(){
+        return dimensins[dimension];
+    }
+
+    private void nextDim(){
+        if(dimension + 1 < dimensins.length)
+            dimension++;
+        else
+            dimension = 0;
+        if(!isFullscrean()){
+            this.setSize(dimensins[dimension]);
+            changeStatus(3);
+        }
+    }
+
 
     public static void main(String[] args){
         Thread mainThread = new Thread(new App());
@@ -45,12 +60,19 @@ public class App extends JFrame implements Runnable{
 
     private void config(){
         fullscrean = true;
+
+        dimension = 0;
+        dimensins[0] = new Dimension(1280, 720);
+        dimensins[1] = new Dimension(1600, 1280);
+        dimensins[2] = new Dimension(640, 360);
+
     }
 
     private void changeFullScrean(){
         if(fullscrean) {
             device.setFullScreenWindow(null);
             fullscrean = false;
+            this.setSize(dimensins[dimension]);
             return;
         }
         else{
@@ -175,6 +197,9 @@ public class App extends JFrame implements Runnable{
         }
         if(optionOptional == 1){
             changeFullScrean();
+        }
+        else if(optionOptional == 2){
+            nextDim();
         }
     }
 
