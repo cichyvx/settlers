@@ -11,7 +11,7 @@ public class MenuPanel extends JPanel implements GamePanel2D{
     private int status = 0,optionalStatus;
 
     private JButton[] buttons;
-    private final String[] buttonsText = {"Start Game", "Map Editor", "Optios", "Exit"};
+    private final String[] buttonsText = {"Start Game", "map.Map Editor", "Optios", "Exit"};
 
     public MenuPanel(int width, int height){
         optionalStatus = 0;

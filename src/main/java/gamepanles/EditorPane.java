@@ -1,6 +1,7 @@
 package gamepanles;
 
 import gamepanles.panelListeners.ExitListener;
+import map.Map;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +12,10 @@ public class EditorPane extends JPanel implements GamePanel2D {
     private int status,optionalStatus;
     private ExitListener exitListener;
 
+    private final int sWeight, sHeight;
+
+    private Map map;
+
     public EditorPane(int width, int height){
         optionalStatus = 0;
         this.WIDTH = width;
@@ -18,6 +23,10 @@ public class EditorPane extends JPanel implements GamePanel2D {
         status = 0;
         exitListener = new ExitListener();
         addKeyListener(exitListener);
+
+        sWeight = 25;
+        sHeight = 25;
+        map = new Map(50, 50, sWeight, sHeight);
     }
 
     @Override
@@ -25,8 +34,19 @@ public class EditorPane extends JPanel implements GamePanel2D {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        g2d.setColor(Color.BLUE);
-        g2d.fillRect(0,0,WIDTH,HEIGHT);
+//        g2d.setColor(Color.black);
+//        g2d.fillRect(0,0,WIDTH,HEIGHT);
+
+        for(int i = 0; i < map.getHEIGHT(); i++){
+            for(int j = 0; j < map.getWIDTH(); j++){
+                int x = map.titles[i][j].getX();
+                int y = map.titles[i][j].getY();
+                g2d.drawImage(map.graphicsHandler.getImage(map.titles[i][j].toString()),x,y,sWeight,sHeight,null);
+            }
+        }
+
+
+
     }
 
     @Override

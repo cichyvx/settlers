@@ -1,9 +1,14 @@
 package core;
 
+import com.sun.tools.javac.Main;
 import gamepanles.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 
 public class App extends JFrame implements Runnable{
 
@@ -53,7 +58,7 @@ public class App extends JFrame implements Runnable{
     }
 
 
-    public static void main(String[] args){
+    public static void main(String[] args)  {
         Thread mainThread = new Thread(new App());
         mainThread.start();
     }
@@ -200,6 +205,9 @@ public class App extends JFrame implements Runnable{
         }
         else if(optionOptional == 2){
             nextDim();
+        }
+        else if(optionOptional == 3){
+
         }
     }
 
