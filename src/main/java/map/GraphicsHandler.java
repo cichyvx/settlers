@@ -31,6 +31,7 @@ public class GraphicsHandler {
             try {
                 images[i] = ImageIO.read(files[i].getAbsoluteFile());
                 names[i] = files[i].getName().substring(0,files[i].getName().length()-4);
+                System.out.println(names[i]);
             }
             catch (IOException igore){
                 System.err.println("Input Error!");
@@ -41,8 +42,9 @@ public class GraphicsHandler {
     }
 
     public Image getImage(String name){
+        name = name.toUpperCase();
         for(int i = 0; i < images.length; i++){
-            if(name.equals(names[i]))
+            if(name.equals(names[i].toUpperCase()))
                 return images[i];
         }
         return null;

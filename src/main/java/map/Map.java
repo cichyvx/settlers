@@ -1,9 +1,7 @@
 package map;
 
 import com.google.gson.Gson;
-import map.ground.DefaultTitle;
-import map.ground.GrassTitle;
-import map.ground.Title;
+import map.ground.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -50,7 +48,7 @@ public class Map {
         titles = new Title[HEIGHT][WIDTH];
         for(int i = 0; i < HEIGHT; i++){
             for(int j = 0; j < WIDTH; j++)
-                titles[i][j] = new DefaultTitle(j * sWeight, i * sHeight);
+                titles[i][j] = new WaterTitle(j * sWeight, i * sHeight);
         }
         return titles;
     }
