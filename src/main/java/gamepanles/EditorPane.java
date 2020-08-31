@@ -10,7 +10,7 @@ public class EditorPane extends JPanel implements GamePanel2D {
 
     private final int WIDTH, HEIGHT;
     private int status,optionalStatus;
-    private ExitListener exitListener;
+    private final ExitListener exitListener;
 
     private final int sWeight, sHeight;
 
@@ -33,9 +33,6 @@ public class EditorPane extends JPanel implements GamePanel2D {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-
-//        g2d.setColor(Color.black);
-//        g2d.fillRect(0,0,WIDTH,HEIGHT);
 
         for(int i = 0; i < map.getHEIGHT(); i++){
             for(int j = 0; j < map.getWIDTH(); j++){
