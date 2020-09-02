@@ -152,6 +152,22 @@ public class Map {
 
     }
 
+    private Title[][] generateSand(Title[][] tab, int sWeight, int sHeight){
+
+        for(int i = 0; i < HEIGHT; i++){
+            for(int j = 0; j  < WIDTH; j++){
+                if(j + 1 < WIDTH)
+                    if(tab[i][j].toString().equals("WATER") && tab[i][j + 1].toString().equals("GRASS"))
+                        tab[i][j + 1] = new SandTitle((j + 1) * sWeight, i * sHeight);
+                if( j - 1 >= 0)
+                    if(tab[i][j].toString().equals("WATER") && tab[i][j - 1].toString().equals("GRASS"))
+                        tab[i][j - 1] = new SandTitle((j - 1) * sWeight, i * sHeight);
+            }
+        }
+
+        return tab;
+    }
+
     private Title[][] generateMap(int sWeight, int sHeight){
         Random r = new Random();
         final int nRock =r.nextInt(2) + 2;
@@ -160,6 +176,7 @@ public class Map {
 
         tab = generateRock(tab, sWeight, sHeight, nRock);
         tab = generateWater(tab, sWeight, sHeight, nRiver);
+        tab = generateSand(tab, sWeight, sHeight);
 
 
         return tab;
