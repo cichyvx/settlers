@@ -26,13 +26,17 @@ public class EditorPane extends JPanel implements GamePanel2D {
 
         sWeight = 25;
         sHeight = 25;
-        map = new Map(50, 50, sWeight, sHeight);
+        map = new Map(50, 50, sWeight, sHeight,true);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+
+        g2d.setColor(Color.black);
+        g2d.fillRect(0,0,WIDTH,HEIGHT);
+
 
         for(int i = 0; i < map.getHEIGHT(); i++){
             for(int j = 0; j < map.getWIDTH(); j++){
