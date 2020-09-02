@@ -9,6 +9,7 @@ public interface Title {
         if(name.equals(new GrassTitle(0,0).toString())) return new GrassTitle(x, y);
         if(name.equals(new RockTitle(0,0).toString())) return new RockTitle(x, y);
         if(name.equals(new WaterTitle(0,0).toString())) return new WaterTitle(x, y);
+        if(name.equals(new SandTitle(0,0).toString())) return new SandTitle(x, y);
         return null;
     }
 
