@@ -1,5 +1,7 @@
 package map.ground;
 
+import map.structures.Structure2D;
+
 import java.awt.*;
 
 public interface Title {
@@ -13,13 +15,15 @@ public interface Title {
         return null;
     }
 
-    public int getId();
     public int getX();
     public int getY();
     public Color getColor();
     public boolean isDestroyable();
     public boolean isWalking();
     public boolean haveObject();
+    Structure2D getStructure();
+    void addStructure(Structure2D structure);
+    void deleteStructure();
     public Rectangle getRectange(int width, int height);
     //public Object getObjectClass();
     //public void setObject(Object object);
