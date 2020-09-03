@@ -64,6 +64,10 @@ public class EditorPane extends JPanel implements GamePanel2D {
                 int x = map.titles[i][j].getX();
                 int y = map.titles[i][j].getY();
                 g2d.drawImage(map.graphicsHandler.getImage(map.titles[i][j].toString()),x,y,sWeight,sHeight,null);
+                if(map.titles[i][j].haveObject()){
+                    g2d.drawImage(map.graphicsHandler.getImage(map.titles[i][j].getStructure().toString()),x,y,sWeight,sHeight,null);
+
+                }
             }
         }
 
