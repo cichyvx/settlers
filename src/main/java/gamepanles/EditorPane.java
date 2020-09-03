@@ -55,7 +55,7 @@ public class EditorPane extends JPanel implements GamePanel2D {
         g2d.scale(scale, scale);
 
         g2d.setColor(Color.black);
-        g2d.fillRect(0,0,WIDTH,HEIGHT);
+        g2d.fillRect(-WIDTH,-HEIGHT,WIDTH * WIDTH,HEIGHT * HEIGHT);
         g2d.setBackground(Color.black);
 
 
