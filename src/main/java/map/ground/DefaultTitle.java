@@ -1,19 +1,18 @@
 package map.ground;
 
+import map.structures.Structure2D;
+
 import java.awt.*;
 
 public class DefaultTitle implements Title{
 
     private final int x,y;
+    Structure2D structure;
 
-    public DefaultTitle(int x, int y){
+    public DefaultTitle(int x, int y) {
         this.x = x;
         this.y = y;
-    }
-
-    @Override
-    public int getId() {
-        return 0;
+        structure = null;
     }
 
     @Override
@@ -48,7 +47,23 @@ public class DefaultTitle implements Title{
 
     @Override
     public boolean haveObject() {
-        return false;
+        return this.structure != null;
+    }
+
+    @Override
+    public Structure2D getStructure() {
+        return this.structure;
+    }
+
+    @Override
+    public void addStructure(Structure2D structure) {
+        if(this.structure != null) return;
+        this.structure = structure;
+    }
+
+    @Override
+    public void deleteStructure() {
+        this.structure = null;
     }
 
     @Override
