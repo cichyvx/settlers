@@ -2,6 +2,7 @@ package map;
 
 import com.google.gson.Gson;
 import map.ground.*;
+import map.structures.TreeStructure;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -168,6 +169,23 @@ public class Map {
         return tab;
     }
 
+    private Title[][] generateTrees(Title[][] tab, int sWeight, int sHeight){
+        Random r = new Random();
+        int count = 0;
+        for(int i = 0; i < HEIGHT; i++){
+            for(int j = 0; j < WIDTH; j++){
+                if(tab[i][j].toString().equals("GRASS")){
+                    if(r.nextInt(100) > 80) {
+                        tab[i][j].addStructure(new TreeStructure());
+                        count++;
+                    }
+                }
+            }
+        }
+        System.out.println(count);
+        return tab;
+    }
+
     private Title[][] generateMap(int sWeight, int sHeight){
         Random r = new Random();
         final int nRock =r.nextInt(2) + 2;
@@ -177,6 +195,7 @@ public class Map {
         tab = generateRock(tab, sWeight, sHeight, nRock);
         tab = generateWater(tab, sWeight, sHeight, nRiver);
         tab = generateSand(tab, sWeight, sHeight);
+        tab = generateTrees(tab, sWeight, sHeight);
 
 
         return tab;
