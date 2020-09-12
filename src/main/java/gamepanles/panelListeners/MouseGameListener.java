@@ -34,6 +34,7 @@ public class MouseGameListener implements MouseMotionListener, java.awt.event.Mo
     public void mouseDragged(MouseEvent e) {
         x = e.getXOnScreen();
         y = e.getYOnScreen();
+        clicked = true;
     }
 
     @Override
@@ -47,6 +48,7 @@ public class MouseGameListener implements MouseMotionListener, java.awt.event.Mo
         x = e.getXOnScreen();
         y = e.getYOnScreen();
         clicked = true;
+        System.out.println("Click");
     }
 
     @Override
