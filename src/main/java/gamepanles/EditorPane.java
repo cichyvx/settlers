@@ -18,9 +18,10 @@ public class EditorPane extends JPanel implements GamePanel2D {
 
     private final int sWeight, sHeight;
 
+
     private Map map;
 
-    public EditorPane(int width, int height){
+    public EditorPane(int width, int height, int mapWidth, int mapHeight, int nRiver, int nRock){
         optionalStatus = 0;
         this.WIDTH = width;
         this.HEIGHT = height;
@@ -43,7 +44,7 @@ public class EditorPane extends JPanel implements GamePanel2D {
         transY = 0;
         scale = 1;
 
-        map = new Map(50, 50, sWeight, sHeight,true);
+        map = new Map(mapWidth, mapHeight, sWeight, sHeight,true, nRiver, nRock);
     }
 
     @Override
