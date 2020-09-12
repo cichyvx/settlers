@@ -1,10 +1,8 @@
 package gamepanles;
 
-import gamepanles.panelListeners.CameraListener;
-import gamepanles.panelListeners.ExitListener;
-import gamepanles.panelListeners.ExitingEditorPane;
-import gamepanles.panelListeners.MouseGameListener;
+import gamepanles.panelListeners.*;
 import map.Map;
+import map.ground.Title;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +16,7 @@ public class EditorPane extends JPanel implements GamePanel2D {
     private final ExitListener exitListener;
     private CameraListener cameraListener;
     private ExitingEditorPane exitingEditorPane;
+    private EditorKeyListener editorKeyListener;
     private boolean exiting;
     private MouseGameListener mouseGameListener;
     private Point point;
@@ -38,10 +37,12 @@ public class EditorPane extends JPanel implements GamePanel2D {
         exitListener = new ExitListener();
         cameraListener = new CameraListener();
         mouseGameListener = new MouseGameListener();
+        editorKeyListener = new EditorKeyListener();
 
 
         addKeyListener(exitListener);
         addKeyListener(cameraListener);
+        addKeyListener(editorKeyListener);
         addMouseMotionListener(mouseGameListener);
         addMouseListener(mouseGameListener);
 
@@ -65,6 +66,8 @@ public class EditorPane extends JPanel implements GamePanel2D {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
+        boolean clicked = mouseGameListener.isClicked();
+
         g2d.translate(transX, transY);
         g2d.scale(scale, scale);
 
@@ -77,8 +80,10 @@ public class EditorPane extends JPanel implements GamePanel2D {
             for (int j = 0; j < map.getWIDTH(); j++) {
                 int x = map.titles[i][j].getX();
                 int y = map.titles[i][j].getY();
-                if(map.titles[i][j].getRectange(sWeight,sHeight).contains(point)){
-                    //map.titles[i][j] =
+                if(clicked){
+                    if(map.titles[i][j].getRectange(sWeight,sHeight).contains(point)){
+                        map.titles[i][j] = Title.getTitle(editorKeyListener.getSelected(), x, y);
+                    }
                 }
                 g2d.drawImage(map.graphicsHandler.getImage(map.titles[i][j].toString()), x, y, sWeight, sHeight, null);
                 if (map.titles[i][j].haveObject()) {
@@ -87,6 +92,8 @@ public class EditorPane extends JPanel implements GamePanel2D {
                 }
             }
         }
+        Title title = Title.getTitle(editorKeyListener.getSelected(), WIDTH - sWeight, HEIGHT - sHeight);
+        g2d.drawImage(map.graphicsHandler.getImage(title.toString()), WIDTH - sWeight - (int)transX, HEIGHT - sHeight - (int) transY, sWeight, sHeight, null);
 
 
     }
