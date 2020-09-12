@@ -40,6 +40,23 @@ public class Map {
         graphicsHandler = new GraphicsHandler();
     }
 
+    public Map(int weight, int height, int sWeight, int sHeight, boolean random, int nRiver, int nRock){
+        WIDTH = weight;
+        HEIGHT = height;
+
+        name = "empty map";
+        autor = "";
+        description = "map created by editor";
+        titles = new Title[weight][height];
+        if(random){
+            titles = generateMap(sWeight, sHeight, nRiver, nRock);
+        }
+        else {
+            titles = fillAllMap(sWeight, sHeight);
+        }
+        graphicsHandler = new GraphicsHandler();
+    }
+
     private Title[][] generateRock(Title[][] tab, int sWeight, int sHeight, int count){
 
         Random r = new Random();
@@ -190,6 +207,18 @@ public class Map {
         Random r = new Random();
         final int nRock =r.nextInt(2) + 2;
         final int nRiver = r.nextInt(3) + 1;
+        Title[][] tab = fillAllMap(sWeight, sHeight, new GrassTitle(0,0).toString());
+
+        tab = generateRock(tab, sWeight, sHeight, nRock);
+        tab = generateWater(tab, sWeight, sHeight, nRiver);
+        tab = generateSand(tab, sWeight, sHeight);
+        tab = generateTrees(tab, sWeight, sHeight);
+
+
+        return tab;
+    }
+
+    private Title[][] generateMap(int sWeight, int sHeight, final int nRiver, final int nRock){
         Title[][] tab = fillAllMap(sWeight, sHeight, new GrassTitle(0,0).toString());
 
         tab = generateRock(tab, sWeight, sHeight, nRock);
