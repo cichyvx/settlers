@@ -11,7 +11,7 @@ public class MenuPanel extends JPanel implements GamePanel2D{
     private int status = 0,optionalStatus;
 
     private JButton[] buttons;
-    private final String[] buttonsText = {"Start Game", "map.Map Editor", "Optios", "Exit"};
+    private final String[] buttonsText = {"Start Game", "Map Editor", "Optios", "Exit"};
 
     public MenuPanel(int width, int height){
         optionalStatus = 0;
@@ -33,9 +33,16 @@ public class MenuPanel extends JPanel implements GamePanel2D{
             buttons[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    setStatus(finalI + 1);
+                    System.out.println(finalI);
                     if(finalI + 1 >= buttons.length)
                         setStatus(-1);
+//                    if(finalI == 3){
+//                        optionalStatus = 3;
+//                        System.out.println("bingo");
+//                    }
+                    else {
+                        setStatus(finalI + 1);
+                    }
                 }
             });
             this.add(buttons[i]);
