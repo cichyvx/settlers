@@ -3,12 +3,12 @@ package gamepanles;
 import gamepanles.panelListeners.CameraListener;
 import gamepanles.panelListeners.ExitListener;
 import gamepanles.panelListeners.ExitingEditorPane;
+import gamepanles.panelListeners.MouseGameListener;
 import map.Map;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 public class EditorPane extends JPanel implements GamePanel2D {
 
@@ -19,6 +19,9 @@ public class EditorPane extends JPanel implements GamePanel2D {
     private CameraListener cameraListener;
     private ExitingEditorPane exitingEditorPane;
     private boolean exiting;
+    private MouseGameListener mouseGameListener;
+    private Point point;
+    private int[] toChanges = {0, 0};
 
     private final int sWeight, sHeight;
 
@@ -26,6 +29,7 @@ public class EditorPane extends JPanel implements GamePanel2D {
     private final Map map;
 
     public EditorPane(int width, int height, int mapWidth, int mapHeight, int nRiver, int nRock) {
+        point = new Point(0,0);
         exiting = false;
         optionalStatus = 0;
         this.WIDTH = width;
@@ -33,9 +37,13 @@ public class EditorPane extends JPanel implements GamePanel2D {
         status = 0;
         exitListener = new ExitListener();
         cameraListener = new CameraListener();
+        mouseGameListener = new MouseGameListener();
+
 
         addKeyListener(exitListener);
         addKeyListener(cameraListener);
+        addMouseMotionListener(mouseGameListener);
+        addMouseListener(mouseGameListener);
 
         addMouseListener(cameraListener);
 
@@ -69,6 +77,9 @@ public class EditorPane extends JPanel implements GamePanel2D {
             for (int j = 0; j < map.getWIDTH(); j++) {
                 int x = map.titles[i][j].getX();
                 int y = map.titles[i][j].getY();
+                if(map.titles[i][j].getRectange(sWeight,sHeight).contains(point)){
+                    //map.titles[i][j] =
+                }
                 g2d.drawImage(map.graphicsHandler.getImage(map.titles[i][j].toString()), x, y, sWeight, sHeight, null);
                 if (map.titles[i][j].haveObject()) {
                     g2d.drawImage(map.graphicsHandler.getImage(map.titles[i][j].getStructure().toString()), x, y, sWeight, sHeight, null);
@@ -96,6 +107,8 @@ public class EditorPane extends JPanel implements GamePanel2D {
 
     @Override
     public void update() {
+        point.x = mouseGameListener.getX();
+        point.y = mouseGameListener.getY();
         if (exitListener.isEscaped() || exiting) {
             if (!exiting) {
                 exitingEditorPane = new ExitingEditorPane();
