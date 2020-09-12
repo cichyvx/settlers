@@ -29,7 +29,7 @@ public class App extends JFrame implements Runnable{
     public static boolean fullscrean;
     private static int dimension;
 
-    private int status;
+    private int status,optionalStatus;
     private final static String TITLE = "Settler game";
     public static final Dimension[] dimensins = new Dimension[3];
     private final short updateTime = 15;
@@ -37,8 +37,11 @@ public class App extends JFrame implements Runnable{
     private EditorPane editorPanel;
     private OptionsPane optionPane;
     private MenuPanel menuPanel;
+    private MapSettingPanel mapSettingPanel;
     public static boolean RUNNING;
     private GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+
+    private int mapWidth, mapHeight, nRiver, nRock;
 
     public static boolean isFullscrean() {return fullscrean;}
 
@@ -115,12 +118,20 @@ public class App extends JFrame implements Runnable{
                 gamePanel = null;
                 break;
             case 2:
-                remove(editorPanel);
-                editorPanel = null;
+                remove(mapSettingPanel);
+                mapWidth = mapSettingPanel.getMapWidth();
+                mapHeight = mapSettingPanel.getMapHeight();
+                nRiver = mapSettingPanel.getRiverCount();
+                nRock = mapSettingPanel.getRockCount();
+                mapSettingPanel = null;
                 break;
             case 3:
                 remove(optionPane);
                 optionPane = null;
+                break;
+            case 4:
+                remove(editorPanel);
+                editorPanel = null;
                 break;
         }
     }
@@ -140,13 +151,18 @@ public class App extends JFrame implements Runnable{
                 break;
             case 2:
                 this.status = 2;
-                this.editorPanel = new EditorPane(this.getWidth(), this.getHeight());
-                this.add(editorPanel).requestFocus();
+                this.mapSettingPanel = new MapSettingPanel(optionalStatus);
+                this.add(mapSettingPanel);
                 break;
             case 3:
                 this.status = 3;
                 this.optionPane = new OptionsPane(this.getWidth(), this.getHeight());
                 this.add(optionPane).requestFocus();
+                break;
+            case 4:
+                this.status = 4;
+                this.editorPanel = new EditorPane(this.getWidth(), this.getHeight(), mapWidth, mapHeight, nRiver, nRock);
+                this.add(editorPanel).requestFocus();
                 break;
             case -1:
                 System.exit(0);
@@ -166,6 +182,8 @@ public class App extends JFrame implements Runnable{
         int menuStatus = menuPanel.getStatus();
         int menuOptional = menuPanel.getOptionalStatus();
         if (menuStatus != 0) {
+            System.out.println("option status: " + menuStatus);
+            optionalStatus = menuOptional;
             changeStatus(menuStatus);
         }
 
@@ -211,6 +229,13 @@ public class App extends JFrame implements Runnable{
         }
     }
 
+    private void mapSettingUpdate(){
+        mapSettingPanel.update();
+        mapSettingPanel.draw();
+        if(mapSettingPanel.getStatus() == 1)
+            changeStatus(4);
+    }
+
     private void update() {
         switch (status){
             case 0:
@@ -220,10 +245,13 @@ public class App extends JFrame implements Runnable{
                 gameUpdate();
                 break;
             case 2:
-                editorUpdate();
+                mapSettingUpdate();
                 break;
             case 3:
                 optiopUpdate();
+                break;
+            case 4:
+                editorUpdate();
                 break;
             case -1:
                 System.exit(0);
