@@ -1,12 +1,14 @@
 package map;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import map.ground.*;
 import map.structures.TreeStructure;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -19,7 +21,7 @@ public class Map {
     private String description;
     private final int WIDTH, HEIGHT;
     public Title[][] titles;
-    public final GraphicsHandler graphicsHandler;
+    public final transient  GraphicsHandler graphicsHandler;
 
 
     /* Emnpty map.Map */
@@ -268,23 +270,31 @@ public class Map {
         this.description = description;
     }
 
-    public void saveMap(Map map){
-        Gson gson = new Gson();
+    public String getName() {
+        return name;
+    }
 
-        URL res = getClass().getClassLoader().getResource("abc.txt");
+    private File getFile(String path){
+        URL res = graphicsHandler.getClass().getClassLoader().getResource(path);
         File file = null;
         try {
             file = Paths.get(res.toURI()).toFile();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-
-        try {
-            gson.toJson(map, new FileWriter(file));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return file;
     }
 
+    public void saveMap(Map map) throws IOException {
+        File file = getFile("maps");
+        System.out.println(file.getAbsolutePath());
+        file = new File(file.getAbsolutePath()+"/"+map.getName()+".json");
+        System.out.println(file.getAbsolutePath());
+        //file.createNewFile();
+        try (Writer writer = new FileWriter(file,false)) {
+            Gson gson = new GsonBuilder().create();
+            gson.toJson(map, writer);
+        }
 
+    }
 }
