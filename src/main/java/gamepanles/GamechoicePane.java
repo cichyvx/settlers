@@ -95,6 +95,18 @@ public class GamechoicePane extends JPanel implements GamePanel2D{
 
     }
 
+    public int getMapSize(){
+        return size;
+    }
+
+    public String getMapName(){
+        if (choiceButtons[choiceButtons.length - 1].isSelected()) return "";
+        for (int i = 0; i < choiceButtons.length; i++){
+            if (choiceButtons[i].isSelected()) return choiceButtons[i].getText();
+        }
+        return "";
+    }
+
     private File getFile(String path){
         URL res = this.getClass().getClassLoader().getResource(path);
         File file = null;
