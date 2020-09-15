@@ -45,20 +45,20 @@ public class CameraListener implements KeyListener, MouseListener, MouseWheelLis
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP){
+        if(e.getKeyCode() == KeyEvent.VK_W){
             translateY = 1;
         }
 
-        else if(e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN){
+        else if(e.getKeyCode() == KeyEvent.VK_S){
             translateY = -1;
         }
 
 
-        if(e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT){
+        if(e.getKeyCode() == KeyEvent.VK_D){
             translateX = -1;
         }
 
-        else if(e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT){
+        else if(e.getKeyCode() == KeyEvent.VK_A){
             translateX = 1;
         }
 
@@ -66,8 +66,8 @@ public class CameraListener implements KeyListener, MouseListener, MouseWheelLis
 
     @Override
     public void keyReleased(KeyEvent e) {
-        boolean horizontal = (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN);
-        boolean vertical = (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT);
+        boolean horizontal = (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_S);
+        boolean vertical = (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_D);
         if(horizontal) translateY = 0;
         if(vertical) translateX = 0;
     }
