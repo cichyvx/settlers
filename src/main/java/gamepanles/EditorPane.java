@@ -3,6 +3,7 @@ package gamepanles;
 import gamepanles.panelListeners.*;
 import map.Map;
 import map.ground.Title;
+import map.structures.Structure2D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,25 +67,19 @@ public class EditorPane extends JPanel implements GamePanel2D {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        boolean clicked = mouseGameListener.isClicked();
-
         g2d.translate(transX, transY);
-        g2d.scale(scale, scale);
+        //g2d.scale(scale, scale); // scale will be added soon
 
         g2d.setColor(Color.black);
         g2d.fillRect(-WIDTH, -HEIGHT, WIDTH * WIDTH, HEIGHT * HEIGHT);
         g2d.setBackground(Color.black);
 
 
+        /* MAP DRAWING */
         for (int i = 0; i < map.getHEIGHT(); i++) {
             for (int j = 0; j < map.getWIDTH(); j++) {
                 int x = map.titles[i][j].getX();
                 int y = map.titles[i][j].getY();
-                if(clicked){
-                    if(map.titles[i][j].getRectange(sWeight,sHeight).contains(point)){
-                        map.titles[i][j] = Title.getTitle(editorKeyListener.getSelected(), x, y);
-                    }
-                }
                 g2d.drawImage(map.graphicsHandler.getImage(map.titles[i][j].toString()), x, y, sWeight, sHeight, null);
                 if (map.titles[i][j].haveObject()) {
                     g2d.drawImage(map.graphicsHandler.getImage(map.titles[i][j].getStructure().toString()), x, y, sWeight, sHeight, null);
@@ -92,8 +87,16 @@ public class EditorPane extends JPanel implements GamePanel2D {
                 }
             }
         }
-        Title title = Title.getTitle(editorKeyListener.getSelected(), WIDTH - sWeight, HEIGHT - sHeight);
-        g2d.drawImage(map.graphicsHandler.getImage(title.toString()), WIDTH - sWeight - (int)transX, HEIGHT - sHeight - (int) transY, sWeight, sHeight, null);
+
+        /* RIGHT BOTTOM ICON DRAWING */
+        if(editorKeyListener.getObjectType() == editorKeyListener.GROUND){
+            Title title = Title.getTitle(editorKeyListener.getSelected(), WIDTH - sWeight, HEIGHT - sHeight);
+            g2d.drawImage(map.graphicsHandler.getImage(title.toString()), WIDTH - sWeight - (int)transX, HEIGHT - sHeight - (int) transY, sWeight, sHeight, null);
+        }
+        else if(editorKeyListener.getObjectType() == editorKeyListener.STRUCTURE){
+            Structure2D structure2D = Structure2D.getStructure(editorKeyListener.getSelected());
+            g2d.drawImage(map.graphicsHandler.getImage(structure2D.toString()), WIDTH - sWeight - (int)transX, HEIGHT - sHeight - (int) transY, sWeight, sHeight, null);
+        }
 
 
     }
@@ -114,24 +117,46 @@ public class EditorPane extends JPanel implements GamePanel2D {
 
     @Override
     public void update() {
-        point.x = mouseGameListener.getX();
-        point.y = mouseGameListener.getY();
-        if (exitListener.isEscaped() || exiting) {
-            if (!exiting) {
-                exitingEditorPane = new ExitingEditorPane();
-                exitingEditorPane.setVisible(true);
-                exiting = true;
+        setTranslation(cameraListener.getTranslateX(), cameraListener.getTranslateY());
+        setScale(cameraListener.getScale());
+
+        point.x = (int) (mouseGameListener.getX() - transX);
+        point.y = (int) (mouseGameListener.getY() - transY);
+
+        /* EDITING */
+        if (mouseGameListener.isClicked()) {
+            for (int i = 0; i < map.getHEIGHT(); i++) {
+                for (int j = 0; j < map.getWIDTH(); j++) {
+                    int y = map.titles[i][j].getY();
+                    if (y + sHeight < point.y) break;
+
+                    int x = map.titles[i][j].getX();
+                    if (map.titles[i][j].getRectange(sWeight, sHeight).contains(point)) {
+                        if(editorKeyListener.getObjectType() == editorKeyListener.GROUND)
+                            map.titles[i][j] = Title.getTitle(editorKeyListener.getSelected(), x, y);
+                        else if(editorKeyListener.getObjectType() == editorKeyListener.STRUCTURE)
+                            map.titles[i][j].addStructure(Structure2D.getStructure(editorKeyListener.getSelected()));
+                    }
+                }
             }
-            if (exitingEditorPane == null) {
-                status = -1;
-                return;
-            }
-            if (exitingEditorPane.isReady()) {
-                map.setName(exitingEditorPane.getNameValue());
-                map.setAutor(exitingEditorPane.getAutorValue());
-                map.setDescription(exitingEditorPane.getDescriptionValue());
-                exitingEditorPane.exit();
-                exitingEditorPane = null;
+
+            /* EXITING */
+            if (exitListener.isEscaped() || exiting) {
+                if (!exiting) {
+                    exitingEditorPane = new ExitingEditorPane();
+                    exitingEditorPane.setVisible(true);
+                    exiting = true;
+                }
+                if (exitingEditorPane == null) {
+                    status = -1;
+                    return;
+                }
+                if (exitingEditorPane.isReady()) {
+                    map.setName(exitingEditorPane.getNameValue());
+                    map.setAutor(exitingEditorPane.getAutorValue());
+                    map.setDescription(exitingEditorPane.getDescriptionValue());
+                    exitingEditorPane.exit();
+                    exitingEditorPane = null;
                     new Thread(() -> {
                         try {
                             map.saveMap(map);
@@ -142,11 +167,10 @@ public class EditorPane extends JPanel implements GamePanel2D {
                     status = -1;
                     exiting = false;
                     return;
+                }
             }
-            }
-            setTranslation(cameraListener.getTranslateX(), cameraListener.getTranslateY());
-            setScale(cameraListener.getScale());
 
+        }
     }
 
     @Override
@@ -163,4 +187,5 @@ public class EditorPane extends JPanel implements GamePanel2D {
     public int getOptionalStatus () {
         return optionalStatus;
     }
+
 }
