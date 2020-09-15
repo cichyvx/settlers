@@ -1,30 +1,11 @@
 package core;
 
-import com.sun.tools.javac.Main;
 import gamepanles.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
 
 public class App extends JFrame implements Runnable{
-
-    public enum status{
-        GAME(1),
-        EDITOR(2),
-        OPTIONS(3),
-        EXIT(4),
-        BACK(-2);
-
-        public final int status;
-
-        status(int status){
-            this.status = status;
-        }
-    }
 
     private final int MENU = 0, GAME = 5, MAPSETTING = 2, OPTION = 3, EDITOR = 4, GAMECHOICE = 1;
 
@@ -42,7 +23,7 @@ public class App extends JFrame implements Runnable{
     private MapSettingPanel mapSettingPanel;
     private GamechoicePane gamechoicePane;
     public static boolean RUNNING;
-    private GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+    private final GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
     private int mapWidth, mapHeight, nRiver, nRock;
 
@@ -106,7 +87,6 @@ public class App extends JFrame implements Runnable{
 
         pack();
         device.setFullScreenWindow(this);
-        System.out.println(this.getSize());
         config();
     }
 
@@ -194,7 +174,6 @@ public class App extends JFrame implements Runnable{
         int menuStatus = menuPanel.getStatus();
         int menuOptional = menuPanel.getOptionalStatus();
         if (menuStatus != 0) {
-            System.out.println("option status: " + menuStatus);
             optionalStatus = menuOptional;
             changeStatus(menuStatus);
         }
