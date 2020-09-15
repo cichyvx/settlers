@@ -26,6 +26,8 @@ public class App extends JFrame implements Runnable{
         }
     }
 
+    private final int MENU = 0, GAME = 5, MAPSETTING = 2, OPTION = 3, EDITOR = 4, GAMECHOICE = 1;
+
     public static boolean fullscrean;
     private static int dimension;
 
@@ -38,6 +40,7 @@ public class App extends JFrame implements Runnable{
     private OptionsPane optionPane;
     private MenuPanel menuPanel;
     private MapSettingPanel mapSettingPanel;
+    private GamechoicePane gamechoicePane;
     public static boolean RUNNING;
     private GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
@@ -56,7 +59,7 @@ public class App extends JFrame implements Runnable{
             dimension = 0;
         if(!isFullscrean()){
             this.setSize(dimensins[dimension]);
-            changeStatus(3);
+            changeStatus(OPTION);
         }
     }
 
@@ -87,7 +90,7 @@ public class App extends JFrame implements Runnable{
             device.setFullScreenWindow(this);
             fullscrean = true;
         }
-        changeStatus(3);
+        changeStatus(OPTION);
     }
 
     public App(){
@@ -109,15 +112,15 @@ public class App extends JFrame implements Runnable{
 
     private void removeC(){
         switch (this.status){
-            case 0:
+            case MENU:
                 remove(menuPanel);
                 menuPanel = null;
                 break;
-            case 1:
+            case GAME:
                 remove(gamePanel);
                 gamePanel = null;
                 break;
-            case 2:
+            case MAPSETTING:
                 remove(mapSettingPanel);
                 mapWidth = mapSettingPanel.getMapWidth();
                 mapHeight = mapSettingPanel.getMapHeight();
@@ -125,13 +128,17 @@ public class App extends JFrame implements Runnable{
                 nRock = mapSettingPanel.getRockCount();
                 mapSettingPanel = null;
                 break;
-            case 3:
+            case OPTION:
                 remove(optionPane);
                 optionPane = null;
                 break;
-            case 4:
+            case EDITOR:
                 remove(editorPanel);
                 editorPanel = null;
+                break;
+            case GAMECHOICE:
+                remove(gamechoicePane);
+                gamechoicePane = null;
                 break;
         }
     }
@@ -139,30 +146,35 @@ public class App extends JFrame implements Runnable{
     private void changeStatus(int status){
         removeC();
         switch (status){
-            case 0:
-                this.status = 0;
+            case MENU:
+                this.status = MENU;
                 menuPanel = new MenuPanel(this.getWidth(), this.getHeight());
                 this.add(menuPanel).requestFocus();
                 break;
-            case 1:
-                this.status = 1;
+            case GAME:
+                this.status = GAME;
                 this.gamePanel = new GamePanel(this.getWidth(), this.getHeight());
                 this.add(gamePanel).requestFocus();
                 break;
-            case 2:
-                this.status = 2;
+            case MAPSETTING:
+                this.status = MAPSETTING;
                 this.mapSettingPanel = new MapSettingPanel(optionalStatus);
-                this.add(mapSettingPanel);
+                this.add(mapSettingPanel).requestFocus();
                 break;
-            case 3:
-                this.status = 3;
+            case OPTION:
+                this.status = OPTION;
                 this.optionPane = new OptionsPane(this.getWidth(), this.getHeight());
                 this.add(optionPane).requestFocus();
                 break;
-            case 4:
-                this.status = 4;
+            case EDITOR:
+                this.status = EDITOR;
                 this.editorPanel = new EditorPane(this.getWidth(), this.getHeight(), mapWidth, mapHeight, nRiver, nRock);
                 this.add(editorPanel).requestFocus();
+                break;
+            case GAMECHOICE:
+                this.status = GAMECHOICE;
+                this.gamechoicePane = new GamechoicePane();
+                this.add(gamechoicePane).requestFocus();
                 break;
             case -1:
                 System.exit(0);
@@ -195,7 +207,7 @@ public class App extends JFrame implements Runnable{
         gamePanel.draw();
         if(gamePanel.getStatus() == -1){
             //gamePanel = null;
-            changeStatus(0);
+            changeStatus(MENU);
         }
     }
 
@@ -205,7 +217,7 @@ public class App extends JFrame implements Runnable{
         editorPanel.draw();
         if(editorPanel.getStatus() == -1){
             //editorPanel = null;
-            changeStatus(0);
+            changeStatus(MENU);
         }
     }
 
@@ -216,7 +228,7 @@ public class App extends JFrame implements Runnable{
         int optionOptional = optionPane.getOptionalStatus();
         if(optionPane.getStatus() == -1){
             //optionPane = null;
-            changeStatus(0);
+            changeStatus(MENU);
         }
         if(optionOptional == 1){
             changeFullScrean();
@@ -233,25 +245,39 @@ public class App extends JFrame implements Runnable{
         mapSettingPanel.update();
         mapSettingPanel.draw();
         if(mapSettingPanel.getStatus() == 1)
-            changeStatus(4);
+            changeStatus(EDITOR);
+        else if(mapSettingPanel.getStatus() == -1)
+            changeStatus(MENU);
+    }
+
+    private void gamechoicePaneUpdate(){
+        gamechoicePane.update();
+        gamechoicePane.draw();
+        if(gamechoicePane.getStatus() == 1)
+            changeStatus(GAME);
+        else if(gamechoicePane.getStatus() == -1)
+            changeStatus(MENU);
     }
 
     private void update() {
         switch (status){
-            case 0:
+            case MENU:
                 menuUpdate();
                 break;
-            case 1:
+            case GAME:
                 gameUpdate();
                 break;
-            case 2:
+            case MAPSETTING:
                 mapSettingUpdate();
                 break;
-            case 3:
+            case OPTION:
                 optiopUpdate();
                 break;
-            case 4:
+            case EDITOR:
                 editorUpdate();
+                break;
+            case GAMECHOICE:
+                gamechoicePaneUpdate();
                 break;
             case -1:
                 System.exit(0);
