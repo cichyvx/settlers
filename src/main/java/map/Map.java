@@ -1,17 +1,22 @@
 package map;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+import com.owlike.genson.Genson;
+import com.owlike.genson.GensonBuilder;
+import conventers.TitleConventer;
+import conventers.TitleHolder;
 import map.ground.*;
 import map.structures.TreeStructure;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Map {
@@ -22,7 +27,6 @@ public class Map {
     private final int WIDTH, HEIGHT;
     public Title[][] titles;
     public final transient  GraphicsHandler graphicsHandler;
-
 
     /* Emnpty map.Map */
     public Map(int weight, int height, int sWeight, int sHeight, boolean random){
@@ -42,6 +46,7 @@ public class Map {
         graphicsHandler = new GraphicsHandler();
     }
 
+    /* random map */
     public Map(int weight, int height, int sWeight, int sHeight, boolean random, int nRiver, int nRock){
         WIDTH = weight;
         HEIGHT = height;
@@ -285,16 +290,78 @@ public class Map {
         return file;
     }
 
+    private static File getFile2(String path){
+        URL res = Map.class.getClassLoader().getResource(path);
+        File file = null;
+        try {
+            file = Paths.get(res.toURI()).toFile();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
     public void saveMap(Map map) throws IOException {
+
         File file = getFile("maps");
         System.out.println(file.getAbsolutePath());
         file = new File(file.getAbsolutePath()+"/"+map.getName()+".json");
-        System.out.println(file.getAbsolutePath());
-        //file.createNewFile();
+        file.createNewFile();
         try (Writer writer = new FileWriter(file,false)) {
-            Gson gson = new GsonBuilder().create();
-            gson.toJson(map, writer);
+            Gson gson = new Gson();
+            TitleHolder titleHolder = new TitleHolder(map.getWIDTH(), map.getHEIGHT(), map.name, map.autor, map.description);
+            for(int i = 0; i < map.getHEIGHT(); i++){
+                for(int j = 0; j < map.getWIDTH(); j++){
+                    titleHolder.add(new TitleConventer(titles[i][j]));
+                }
+            }
+            gson.toJson(titleHolder, writer);
         }
 
     }
+
+    private void setTitles(Title[][] titles){
+        this.titles = titles;
+    }
+
+    public static Map loadMap(String mapname){
+        File file = getFile2("maps");
+        for (File f : file.listFiles()){
+            if(f.getName().equals(mapname+".json")){
+                file = f;
+                break;
+            }
+        }
+
+        Gson gson = new Gson();
+        Map map = null;
+        Reader reader = null;
+        try {
+            reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()+"\\"+mapname));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        TitleHolder titleHolder = gson.fromJson(reader, TitleHolder.class);
+        int height = titleHolder.height;
+        int width = titleHolder.width;
+        Title[][] titles = new Title[height][width];
+
+        int l = 0;
+        for(int i = 0; i < height; i++){
+            for (int j = 0; j < width; j++){
+                TitleConventer t = titleHolder.getList().get(l);
+                titles[i][j] = Title.getTitle(t.getName(), t.getX(), t.getY());
+                l++;
+            }
+        }
+        map = new Map(width, height, 25, 25, false);
+        map.setName(titleHolder.name);
+        map.setDescription(titleHolder.description);
+        map.setAutor(titleHolder.autor);
+        map.setTitles(titles);
+
+
+        return map;
+    }
+
 }
