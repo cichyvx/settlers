@@ -7,6 +7,7 @@ import com.owlike.genson.GensonBuilder;
 import conventers.TitleConventer;
 import conventers.TitleHolder;
 import map.ground.*;
+import map.structures.Structure2D;
 import map.structures.TreeStructure;
 
 import java.io.*;
@@ -351,6 +352,7 @@ public class Map {
             for (int j = 0; j < width; j++){
                 TitleConventer t = titleHolder.getList().get(l);
                 titles[i][j] = Title.getTitle(t.getName(), t.getX(), t.getY());
+                titles[i][j].addStructure(Structure2D.getStructure(t.getStructure()));
                 l++;
             }
         }
