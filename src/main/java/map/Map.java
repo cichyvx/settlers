@@ -7,6 +7,7 @@ import com.owlike.genson.GensonBuilder;
 import conventers.TitleConventer;
 import conventers.TitleHolder;
 import map.ground.*;
+import map.structures.PlantStructure;
 import map.structures.Structure2D;
 import map.structures.TreeStructure;
 
@@ -200,8 +201,25 @@ public class Map {
         for(int i = 0; i < HEIGHT; i++){
             for(int j = 0; j < WIDTH; j++){
                 if(tab[i][j].toString().equals("GRASS")){
-                    if(r.nextInt(100) > 80) {
+                    if(r.nextInt(100) > 50) {
                         tab[i][j].addStructure(new TreeStructure());
+                        count++;
+                    }
+                }
+            }
+        }
+        System.out.println(count);
+        return tab;
+    }
+
+    private Title[][] generatePlants(Title[][] tab, int sWeight, int sHeight){
+        Random r = new Random();
+        int count = 0;
+        for(int i = 0; i < HEIGHT; i++){
+            for(int j = 0; j < WIDTH; j++){
+                if(tab[i][j].toString().equals("GRASS")){
+                    if(r.nextInt(100) > 50 && !tab[i][j].haveObject()) {
+                        tab[i][j].addStructure(new PlantStructure());
                         count++;
                     }
                 }
@@ -233,6 +251,7 @@ public class Map {
         tab = generateWater(tab, sWeight, sHeight, nRiver);
         tab = generateSand(tab, sWeight, sHeight);
         tab = generateTrees(tab, sWeight, sHeight);
+        tab = generatePlants(tab, sWeight, sHeight);
 
 
         return tab;
