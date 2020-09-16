@@ -1,9 +1,9 @@
 package gamepanles;
 
+import gamepanles.panelListeners.CameraListener;
 import gamepanles.panelListeners.ExitListener;
+import gamepanles.panelListeners.MouseGameListener;
 import map.Map;
-import map.ground.Title;
-import map.structures.Structure2D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +15,10 @@ public class GamePanel extends JPanel implements GamePanel2D{
     private ExitListener exitListener;
     private final int sWeight, sHeight;
     private final Map map;
+    private double transX, transY;
+    private Point point;
+    private CameraListener cameraListener;
+    private MouseGameListener mouseGameListener;
 
     public GamePanel(int width, int height, int mapWidth, int mapHeight, Map map){
         optionalStatus = 0;
@@ -25,8 +29,15 @@ public class GamePanel extends JPanel implements GamePanel2D{
         this.sHeight = mapHeight;
         status = 0;
         exitListener = new ExitListener();
+        cameraListener = new CameraListener();
+        mouseGameListener = new MouseGameListener();
         addKeyListener(exitListener);
+        addKeyListener(cameraListener);
+        addMouseListener(mouseGameListener);
         this.map = map;
+        transX = 0;
+        transY = 0;
+        point = new Point();
     }
 
     @Override
@@ -34,7 +45,7 @@ public class GamePanel extends JPanel implements GamePanel2D{
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        //g2d.translate(transX, transY);
+        g2d.translate(transX, transY);
         //g2d.scale(scale, scale); // scale will be added soon
 
         g2d.setColor(Color.black);
@@ -56,8 +67,22 @@ public class GamePanel extends JPanel implements GamePanel2D{
         }
     }
 
+    private void setTranslation(int rightWise, int upWise) {
+        if (upWise > 0) transY += 2;
+        if (upWise < 0) transY -= 2;
+
+        if (rightWise > 0) transX += 2;
+        if (rightWise < 0) transX -= 2;
+    }
+
     @Override
     public void update() {
+
+        setTranslation(cameraListener.getTranslateX(), cameraListener.getTranslateY());
+
+        point.x = (int) (mouseGameListener.getX() - transX);
+        point.y = (int) (mouseGameListener.getY() - transY);
+
         if(exitListener.isEscaped()) status = -1;
     }
 
