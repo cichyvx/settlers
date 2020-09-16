@@ -1,6 +1,7 @@
 package core;
 
 import gamepanles.*;
+import map.Map;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +27,7 @@ public class App extends JFrame implements Runnable{
     private final GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
     private int mapWidth, mapHeight, nRiver, nRock;
+    private String mapName;
 
     public static boolean isFullscrean() {return fullscrean;}
 
@@ -118,6 +120,9 @@ public class App extends JFrame implements Runnable{
                 break;
             case GAMECHOICE:
                 remove(gamechoicePane);
+                mapWidth = gamechoicePane.getMapSize();
+                mapHeight = gamechoicePane.getMapSize();
+                mapName = gamechoicePane.getMapName();
                 gamechoicePane = null;
                 break;
         }
@@ -133,7 +138,11 @@ public class App extends JFrame implements Runnable{
                 break;
             case GAME:
                 this.status = GAME;
-                this.gamePanel = new GamePanel(this.getWidth(), this.getHeight());
+                if(mapName.equals("")) {
+                    Map map = new Map(mapWidth, mapHeight, 25, 25, true, 3, 3);
+                    this.gamePanel = new GamePanel(this.getWidth(), this.getHeight(), 25, 25, map);
+                }
+                else this.gamePanel = new GamePanel(this.getWidth(), this.getHeight(), 25, 25, Map.loadMap(mapName));
                 this.add(gamePanel).requestFocus();
                 break;
             case MAPSETTING:
