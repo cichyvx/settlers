@@ -1,4 +1,4 @@
-package gamepanles.panelListeners;
+package gamepanles;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +33,6 @@ public class ExitingEditorPane extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ready = true;
-                System.out.println(isReady());
             }
         });
 
