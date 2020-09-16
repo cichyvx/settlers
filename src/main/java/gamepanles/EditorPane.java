@@ -142,12 +142,13 @@ public class EditorPane extends JPanel implements GamePanel2D {
 
             /* EXITING */
             if (exitListener.isEscaped() || exiting) {
+                System.out.println("dziala cos help");
                 if (!exiting) {
                     exitingEditorPane = new ExitingEditorPane();
                     exitingEditorPane.setVisible(true);
                     exiting = true;
                 }
-                if (exitingEditorPane == null) {
+                if (exitingEditorPane == null && false) {
                     status = -1;
                     return;
                 }
@@ -163,7 +164,7 @@ public class EditorPane extends JPanel implements GamePanel2D {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    });
+                    }).run();
                     status = -1;
                     exiting = false;
                     return;
