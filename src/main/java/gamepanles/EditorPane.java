@@ -15,15 +15,15 @@ public class EditorPane extends JPanel implements GamePanel2D {
     private double transX, transY, scale;
     private int status, optionalStatus;
     private final ExitListener exitListener;
-    private CameraListener cameraListener;
+    private final CameraListener cameraListener;
     private ExitingEditorPane exitingEditorPane;
-    private EditorKeyListener editorKeyListener;
+    private final EditorKeyListener editorKeyListener;
     private boolean exiting;
-    private MouseGameListener mouseGameListener;
-    private Point point;
-    private int[] toChanges = {0, 0};
+    private final MouseGameListener mouseGameListener;
+    private final Point point;
 
-    private final int sWeight, sHeight;
+    private int sWeight;
+    private int sHeight;
 
 
     private final Map map;
@@ -35,31 +35,35 @@ public class EditorPane extends JPanel implements GamePanel2D {
         this.WIDTH = width;
         this.HEIGHT = height;
         status = 0;
+
         exitListener = new ExitListener();
         cameraListener = new CameraListener();
         mouseGameListener = new MouseGameListener();
         editorKeyListener = new EditorKeyListener();
 
+        initializeKeyListeners();
+        initializeSettings();
 
+        map = new Map(mapWidth, mapHeight, sWeight, sHeight, true, nRiver, nRock);
+    }
+
+    private void initializeKeyListeners(){
         addKeyListener(exitListener);
         addKeyListener(cameraListener);
         addKeyListener(editorKeyListener);
         addMouseMotionListener(mouseGameListener);
         addMouseListener(mouseGameListener);
-
         addMouseListener(cameraListener);
-
         addMouseMotionListener(cameraListener);
-
         addMouseWheelListener(cameraListener);
+    }
 
+    private void initializeSettings(){
         sWeight = 25;
         sHeight = 25;
         transX = 0;
         transY = 0;
         scale = 1;
-
-        map = new Map(mapWidth, mapHeight, sWeight, sHeight, true, nRiver, nRock);
     }
 
     @Override
@@ -68,7 +72,6 @@ public class EditorPane extends JPanel implements GamePanel2D {
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.translate(transX, transY);
-        //g2d.scale(scale, scale); // scale will be added soon
 
         g2d.setColor(Color.black);
         g2d.fillRect(-WIDTH, -HEIGHT, WIDTH * WIDTH, HEIGHT * HEIGHT);
@@ -89,12 +92,14 @@ public class EditorPane extends JPanel implements GamePanel2D {
         }
 
         /* RIGHT BOTTOM ICON DRAWING */
-        if(editorKeyListener.getObjectType() == editorKeyListener.GROUND){
+        if(editorKeyListener.getObjectType() == EditorKeyListener.GROUND){
             Title title = Title.getTitle(editorKeyListener.getSelected(), WIDTH - sWeight, HEIGHT - sHeight);
+            assert title != null;
             g2d.drawImage(map.graphicsHandler.getImage(title.toString()), WIDTH - sWeight - (int)transX, HEIGHT - sHeight - (int) transY, sWeight, sHeight, null);
         }
-        else if(editorKeyListener.getObjectType() == editorKeyListener.STRUCTURE){
+        else if(editorKeyListener.getObjectType() == EditorKeyListener.STRUCTURE){
             Structure2D structure2D = Structure2D.getStructure(editorKeyListener.getSelected());
+            assert structure2D != null;
             g2d.drawImage(map.graphicsHandler.getImage(structure2D.toString()), WIDTH - sWeight - (int)transX, HEIGHT - sHeight - (int) transY, sWeight, sHeight, null);
         }
 
@@ -132,14 +137,14 @@ public class EditorPane extends JPanel implements GamePanel2D {
 
                     int x = map.titles[i][j].getX();
                     if (map.titles[i][j].getRectange(sWeight, sHeight).contains(point)) {
-                        if(editorKeyListener.getObjectType() == editorKeyListener.GROUND)
+                        if (editorKeyListener.getObjectType() == EditorKeyListener.GROUND)
                             map.titles[i][j] = Title.getTitle(editorKeyListener.getSelected(), x, y);
-                        else if(editorKeyListener.getObjectType() == editorKeyListener.STRUCTURE)
+                        else if (editorKeyListener.getObjectType() == EditorKeyListener.STRUCTURE)
                             map.titles[i][j].addStructure(Structure2D.getStructure(editorKeyListener.getSelected()));
                     }
                 }
             }
-
+        }
             /* EXITING */
             if (exitListener.isEscaped() || exiting) {
                 System.out.println("dziala cos help");
@@ -148,10 +153,11 @@ public class EditorPane extends JPanel implements GamePanel2D {
                     exitingEditorPane.setVisible(true);
                     exiting = true;
                 }
-                if (exitingEditorPane == null && false) {
+                if (exitingEditorPane == null && !exiting) {
                     status = -1;
                     return;
                 }
+                assert exitingEditorPane != null;
                 if (exitingEditorPane.isReady()) {
                     map.setName(exitingEditorPane.getNameValue());
                     map.setAutor(exitingEditorPane.getAutorValue());
@@ -171,7 +177,7 @@ public class EditorPane extends JPanel implements GamePanel2D {
                 }
             }
 
-        }
+
     }
 
     @Override
