@@ -8,7 +8,7 @@ import java.io.IOException;
 /*
     class using for handling in ram memory array of graphics representation of object.
     recommended quantity for this class is one
-    class collecting all files from all folder in resources folder
+    class collecting all files from all folder in resources\graphics folder
     class can return list of all sources or one of them
  */
 
@@ -18,7 +18,7 @@ public class GraphicsHandler {
     private final String[] names;
 
     public GraphicsHandler(){
-        final String resourceFolderName = "resources";
+        final String resourceFolderName = "resources\\graphics";
 
         File[] toList = new File(resourceFolderName).listFiles();
         File[] files = null;
