@@ -7,16 +7,14 @@ import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
 
 public class GamechoicePane extends JPanel implements GamePanel2D{
 
-    private ExitListener exitListener;
-    private int status,optionalStatus;
+    final private ExitListener exitListener;
+    private int status;
+    private final int optionalStatus;
     private File[] files;
-    private JRadioButton[] choiceButtons;
+    private final JRadioButton[] choiceButtons;
     private JButton button;
     private int selected;
     private JSlider sliderMapSize;
@@ -33,7 +31,7 @@ public class GamechoicePane extends JPanel implements GamePanel2D{
 
         this.setLayout(new GridLayout(40,1));
 
-        files = getFile("maps").listFiles();
+        files = new File("resources\\maps").listFiles();
         choiceButtons = new JRadioButton[files.length+1];
         choiceButtons[choiceButtons.length - 1] = new JRadioButton("Generate Random Maps");
         choiceButtons[choiceButtons.length - 1].addActionListener(e -> {
@@ -107,16 +105,6 @@ public class GamechoicePane extends JPanel implements GamePanel2D{
         return "";
     }
 
-    private File getFile(String path){
-        URL res = this.getClass().getClassLoader().getResource(path);
-        File file = null;
-        try {
-            file = Paths.get(res.toURI()).toFile();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return file;
-    }
 
     @Override
     public void update() {
