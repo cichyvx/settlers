@@ -323,7 +323,7 @@ public class Map {
 
     public void saveMap(Map map) throws IOException {
 
-        File file = getFile("maps");
+        File file = new File("resources\\maps");
         System.out.println(file.getAbsolutePath());
         file = new File(file.getAbsolutePath()+"/"+map.getName()+".json");
         file.createNewFile();
