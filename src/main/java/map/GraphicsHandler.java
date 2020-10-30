@@ -1,14 +1,16 @@
 package map;
 
-import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.Arrays;
+
+/*
+    class using for handling in ram memory array of graphics representation of object.
+    recommended quantity for this class is one
+    class collecting all files from all folder in resources folder
+    class can return list of all sources or one of them
+ */
 
 public class GraphicsHandler {
 
@@ -16,22 +18,30 @@ public class GraphicsHandler {
     private final String[] names;
 
     public GraphicsHandler(){
-        File[] files = null;
-        files = getFile("ground").listFiles();
-        files = addToArray(files, getFile("structures").listFiles());
-        //File file_ground = getFile("ground");
-        //File file_struct = getFile("structures");
+        final String resourceFolderName = "resources";
 
-        //File[] files = mergeArrays(file_ground, file_struct).//file.listFiles();
+        File[] toList = new File(resourceFolderName).listFiles();
+        File[] files = null;
+
+        assert toList != null;
+
+        for(File file: toList){
+            files = addToArray(files, file.listFiles());
+        }
+
+        assert files != null;
+
+
         names = new String[files.length];
         images = new Image[files.length];
+
         for(int i = 0; i < files.length; i++){
             try {
                 images[i] = ImageIO.read(files[i].getAbsoluteFile());
-                names[i] = files[i].getName().substring(0,files[i].getName().length()-4);
-                System.out.println(names[i]);
+                names[i] = files[i].getName().substring(0,files[i].getName().length() - 4); //deleting last 4 characters because name in Array must be the same as Object.toString who using it
+                System.out.println(names[i] +" " + files[i].getAbsolutePath());
             }
-            catch (IOException igore){
+            catch (IOException e){
                 System.err.println("Input Error!");
             }
         }
@@ -40,6 +50,9 @@ public class GraphicsHandler {
     }
 
     private File[] addToArray(File[] array1, File[] array2){
+        if(array1 == null && array2 == null) return null;
+        else if(array1 == null) return array2;
+        else if(array2 == null) return array1;
         File[] tab = new File[array1.length + array2.length];
 
         for(int i = 0; i < tab.length; i++){
@@ -50,17 +63,10 @@ public class GraphicsHandler {
         return tab;
     }
 
-    private File getFile(String path){
-        URL res = getClass().getClassLoader().getResource(path);
-        File file = null;
-        try {
-            file = Paths.get(res.toURI()).toFile();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return file;
-    }
 
+    /*
+    use this method when you want get Image of Object by name of this object
+     */
     public Image getImage(String name){
         name = name.toUpperCase();
         for(int i = 0; i < images.length; i++){
