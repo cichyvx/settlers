@@ -5,7 +5,7 @@ public interface Structure2D {
     int PLANT = 2;
 
     static int getStructuresCount(){
-        return 1;
+        return 2;
     }
 
     static Structure2D getStructure(String name){
