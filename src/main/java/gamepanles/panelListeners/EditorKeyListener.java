@@ -1,5 +1,6 @@
 package gamepanles.panelListeners;
 
+import creatures.animals.Animal;
 import map.ground.Title;
 import map.structures.Structure2D;
 
@@ -12,12 +13,12 @@ public class EditorKeyListener implements KeyListener {
     private int objectType;
     private final int MAXOBJECT;
 
-    public static final int GROUND = 1, STRUCTURE = 2;
+    public static final int GROUND = 1, STRUCTURE = 2, ANIMAL = 3;
 
     public EditorKeyListener(){
         selected = 1;
         objectType = 1;
-        MAXOBJECT = 2;
+        MAXOBJECT = 3;
     }
 
     public int getObjectType(){
@@ -45,6 +46,13 @@ public class EditorKeyListener implements KeyListener {
                 }
                 selected++;
                 break;
+
+            case 3:
+                if(selected + 1 > Animal.getAnimalsCount()){
+                    selected = 1;
+                }
+                selected++;
+                break;
         }
     }
 
@@ -65,11 +73,20 @@ public class EditorKeyListener implements KeyListener {
                 }
                 selected--;
                 break;
+
+            case 3:
+                if(selected - 1 < 1){
+                    selected = Animal.getAnimalsCount();
+                    break;
+                }
+                selected--;
+                break;
         }
 
     }
 
     private void nextType(){
+        selected = 1;
         if(objectType + 1 > MAXOBJECT){
             objectType = 1;
             System.out.println(objectType);
@@ -80,10 +97,13 @@ public class EditorKeyListener implements KeyListener {
     }
 
     private void previousType(){
+        selected = 1;
         if(objectType - 1 < 1){
             objectType = MAXOBJECT;
+            System.out.println(objectType);
             return;
         }
+        System.out.println(objectType);
         objectType--;
     }
 
