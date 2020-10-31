@@ -6,6 +6,7 @@ import com.owlike.genson.Genson;
 import com.owlike.genson.GensonBuilder;
 import conventers.TitleConventer;
 import conventers.TitleHolder;
+import creatures.AI;
 import map.ground.*;
 import map.structures.PlantStructure;
 import map.structures.Structure2D;
@@ -28,6 +29,7 @@ public class Map {
     private String description;
     private final int WIDTH, HEIGHT;
     public Title[][] titles;
+    public AI animals_AI;
     public final transient  GraphicsHandler graphicsHandler;
 
     /* Emnpty map.Map */
@@ -46,6 +48,7 @@ public class Map {
             titles = fillAllMap(sWeight, sHeight);
         }
         graphicsHandler = new GraphicsHandler();
+        animals_AI = new AI(this);
     }
 
     /* random map */
@@ -64,6 +67,7 @@ public class Map {
             titles = fillAllMap(sWeight, sHeight);
         }
         graphicsHandler = new GraphicsHandler();
+        animals_AI = new AI(this);
     }
 
     private Title[][] generateRock(Title[][] tab, int sWeight, int sHeight, int count){
