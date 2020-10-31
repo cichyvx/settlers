@@ -1,5 +1,6 @@
 package gamepanles;
 
+import creatures.animals.Animal;
 import gamepanles.panelListeners.*;
 import map.Map;
 import map.ground.Title;
@@ -12,7 +13,7 @@ import java.io.IOException;
 public class EditorPane extends JPanel implements GamePanel2D {
 
     private final int WIDTH, HEIGHT;
-    private double transX, transY, scale;
+    private double transX, transY;
     private int status, optionalStatus;
     private final ExitListener exitListener;
     private final CameraListener cameraListener;
@@ -63,7 +64,6 @@ public class EditorPane extends JPanel implements GamePanel2D {
         sHeight = 25;
         transX = 0;
         transY = 0;
-        scale = 1;
     }
 
     @Override
@@ -91,6 +91,13 @@ public class EditorPane extends JPanel implements GamePanel2D {
             }
         }
 
+        /* CREATURES DRAWING */
+        if(!map.animals_AI.getAnimals().isEmpty()){
+            for (Animal animal: map.animals_AI.getAnimals()){
+                g2d.drawImage(map.graphicsHandler.getImage(animal.toString()), (int) animal.getX(), (int) animal.getY(), sWeight, sHeight, null);
+            }
+        }
+
         /* RIGHT BOTTOM ICON DRAWING */
         if(editorKeyListener.getObjectType() == EditorKeyListener.GROUND){
             Title title = Title.getTitle(editorKeyListener.getSelected(), WIDTH - sWeight, HEIGHT - sHeight);
@@ -101,6 +108,11 @@ public class EditorPane extends JPanel implements GamePanel2D {
             Structure2D structure2D = Structure2D.getStructure(editorKeyListener.getSelected());
             assert structure2D != null;
             g2d.drawImage(map.graphicsHandler.getImage(structure2D.toString()), WIDTH - sWeight - (int)transX, HEIGHT - sHeight - (int) transY, sWeight, sHeight, null);
+        }
+        else if(editorKeyListener.getObjectType() == EditorKeyListener.ANIMAL){
+            Animal animal = Animal.getAnimal(editorKeyListener.getSelected());
+            assert animal != null;
+            g2d.drawImage(map.graphicsHandler.getImage(animal.toString()), WIDTH - sWeight - (int)transX, HEIGHT - sHeight - (int) transY, sWeight, sHeight, null);
         }
 
 
@@ -114,40 +126,48 @@ public class EditorPane extends JPanel implements GamePanel2D {
         if (rightWise < 0) transX -= 2;
     }
 
-    private void setScale(double scale) {
-        if (scale == 0) return;
-        final int precision = 20;
-        this.scale += scale / precision;
+    private void mapChange(){
+        for (int i = 0; i < map.getHEIGHT(); i++) {
+            for (int j = 0; j < map.getWIDTH(); j++) {
+                int y = map.titles[i][j].getY();
+                if (y + sHeight < point.y) break;
+
+                int x = map.titles[i][j].getX();
+                if (map.titles[i][j].getRectange(sWeight, sHeight).contains(point)) {
+                    if (editorKeyListener.getObjectType() == EditorKeyListener.GROUND)
+                        map.titles[i][j] = Title.getTitle(editorKeyListener.getSelected(), x, y);
+                    else if (editorKeyListener.getObjectType() == EditorKeyListener.STRUCTURE)
+                        map.titles[i][j].addStructure(Structure2D.getStructure(editorKeyListener.getSelected()));
+                }
+            }
+        }
+    }
+
+    private void animalChange(){
+        Animal animal = Animal.getAnimal(editorKeyListener.getSelected());
+        animal.setX(point.x-sWeight/2);
+        animal.setY(point.y-sHeight/2);
+        animal.setWeight(sWeight);
+        animal.setHeight(sHeight);
+        map.animals_AI.add(animal);
     }
 
     @Override
     public void update() {
+        /* CAMERA TRANSLATION */
         setTranslation(cameraListener.getTranslateX(), cameraListener.getTranslateY());
-        setScale(cameraListener.getScale());
 
+        /* GETTING COURSOR POSITION */
         point.x = (int) (mouseGameListener.getX() - transX);
         point.y = (int) (mouseGameListener.getY() - transY);
 
         /* EDITING */
         if (mouseGameListener.isClicked()) {
-            for (int i = 0; i < map.getHEIGHT(); i++) {
-                for (int j = 0; j < map.getWIDTH(); j++) {
-                    int y = map.titles[i][j].getY();
-                    if (y + sHeight < point.y) break;
-
-                    int x = map.titles[i][j].getX();
-                    if (map.titles[i][j].getRectange(sWeight, sHeight).contains(point)) {
-                        if (editorKeyListener.getObjectType() == EditorKeyListener.GROUND)
-                            map.titles[i][j] = Title.getTitle(editorKeyListener.getSelected(), x, y);
-                        else if (editorKeyListener.getObjectType() == EditorKeyListener.STRUCTURE)
-                            map.titles[i][j].addStructure(Structure2D.getStructure(editorKeyListener.getSelected()));
-                    }
-                }
-            }
+            if(editorKeyListener.getObjectType() == EditorKeyListener.GROUND || editorKeyListener.getObjectType() == EditorKeyListener.STRUCTURE) mapChange();
+            else if(editorKeyListener.getObjectType() == EditorKeyListener.ANIMAL) animalChange();
         }
             /* EXITING */
             if (exitListener.isEscaped() || exiting) {
-                System.out.println("dziala cos help");
                 if (!exiting) {
                     exitingEditorPane = new ExitingEditorPane();
                     exitingEditorPane.setVisible(true);
