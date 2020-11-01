@@ -1,5 +1,6 @@
 package gamepanles;
 
+import creatures.animals.Animal;
 import gamepanles.panelListeners.CameraListener;
 import gamepanles.panelListeners.ExitListener;
 import gamepanles.panelListeners.MouseGameListener;
@@ -64,6 +65,11 @@ public class GamePanel extends JPanel implements GamePanel2D{
 
                 }
             }
+        }
+
+        /* ANIMAL DRAWING */
+        for(Animal animal: map.animals_AI.getAnimals()){
+            g2d.drawImage(map.graphicsHandler.getImage(animal.toString()), (int) animal.getX(), (int) animal.getY(), sWeight, sHeight, null);
         }
     }
 
