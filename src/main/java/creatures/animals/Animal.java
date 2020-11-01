@@ -1,9 +1,19 @@
 package creatures.animals;
 
 public interface Animal {
+
     static Animal getAnimal(int selected) {
         switch (selected){
             case 1:
+                return new Cow(0,0,0,0);
+            default:
+                return new Cow(0,0,0,0);
+        }
+    }
+
+    static Animal getAnimal(String name) {
+        switch (name){
+            case "COW":
                 return new Cow(0,0,0,0);
             default:
                 return new Cow(0,0,0,0);
