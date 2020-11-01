@@ -29,6 +29,10 @@ public class AI {
         return null;
     }
 
+    public void setAnimals(List<Animal> animals){
+        this.animals = animals;
+    }
+
     public void add(Animal animal) {
         animals.add(animal);
     }
