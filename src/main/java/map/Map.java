@@ -1,19 +1,17 @@
 package map;
 
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import com.owlike.genson.Genson;
-import com.owlike.genson.GensonBuilder;
+import conventers.AnimalConventer;
 import conventers.TitleConventer;
 import conventers.TitleHolder;
 import creatures.AI;
+import creatures.animals.Animal;
 import map.ground.*;
 import map.structures.PlantStructure;
 import map.structures.Structure2D;
 import map.structures.TreeStructure;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -336,9 +334,13 @@ public class Map {
             TitleHolder titleHolder = new TitleHolder(map.getWIDTH(), map.getHEIGHT(), map.name, map.autor, map.description);
             for(int i = 0; i < map.getHEIGHT(); i++){
                 for(int j = 0; j < map.getWIDTH(); j++){
-                    titleHolder.add(new TitleConventer(titles[i][j]));
+                    titleHolder.addTitle(new TitleConventer(titles[i][j]));
                 }
             }
+
+            for(Animal animal:animals_AI.getAnimals())
+                titleHolder.addAnimal(new AnimalConventer(animal));
+
             gson.toJson(titleHolder, writer);
         }
 
@@ -349,7 +351,7 @@ public class Map {
     }
 
     public static Map loadMap(String mapname){
-        File file = getFile2("maps");
+        File file = new File("resources\\maps");
         for (File f : file.listFiles()){
             if(f.getName().equals(mapname+".json")){
                 file = f;
@@ -369,21 +371,28 @@ public class Map {
         int height = titleHolder.height;
         int width = titleHolder.width;
         Title[][] titles = new Title[height][width];
+        List<Animal> animals = new ArrayList<>();
 
         int l = 0;
         for(int i = 0; i < height; i++){
             for (int j = 0; j < width; j++){
-                TitleConventer t = titleHolder.getList().get(l);
+                TitleConventer t = titleHolder.getTitles().get(l);
                 titles[i][j] = Title.getTitle(t.getName(), t.getX(), t.getY());
                 titles[i][j].addStructure(Structure2D.getStructure(t.getStructure()));
                 l++;
             }
         }
+
+        for (AnimalConventer animalConv:titleHolder.getAnimals()){
+            animals.add(AnimalConventer.AgetAnimal(animalConv));
+        }
+
         map = new Map(width, height, 25, 25, false);
         map.setName(titleHolder.name);
         map.setDescription(titleHolder.description);
         map.setAutor(titleHolder.autor);
         map.setTitles(titles);
+        map.animals_AI.setAnimals(animals);
 
 
         return map;
