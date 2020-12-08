@@ -32,10 +32,15 @@ public class GamechoicePane extends JPanel implements GamePanel2D{
 
         File[] files = new File("resources\\maps").listFiles();
 
-        assert files != null;
 
-        choiceButtons = new JRadioButton[files.length+1];
-        choiceButtons[choiceButtons.length - 1] = new JRadioButton("Generate Random Maps");
+        if(files != null){
+            choiceButtons = new JRadioButton[files.length+1];
+            choiceButtons[choiceButtons.length - 1] = new JRadioButton("Generate Random Maps");
+        }
+        else{
+            choiceButtons = new JRadioButton[1];
+            choiceButtons[0] = new JRadioButton("Generate Random Maps");
+        }
 
         choiceButtons[choiceButtons.length - 1].addActionListener(e -> {
             selected = choiceButtons.length - 1;
