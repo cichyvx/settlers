@@ -1,5 +1,9 @@
 package creatures.animals;
 
+import map.ground.Title;
+
+import java.util.List;
+
 public interface Animal {
 
     static Animal getAnimal(int selected) {
@@ -29,7 +33,7 @@ public interface Animal {
     void setY(double y);
     void setWeight(int weight);
     void setHeight(int height);
-
+    void setWay(List<Title> titles);
     void update();
 
     static int getAnimalsCount(){
