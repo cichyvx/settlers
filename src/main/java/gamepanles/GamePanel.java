@@ -5,6 +5,8 @@ import gamepanles.panelListeners.CameraListener;
 import gamepanles.panelListeners.ExitListener;
 import gamepanles.panelListeners.MouseGameListener;
 import map.Map;
+import map.ground.Title;
+import map.structures.Structure2D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +22,10 @@ public class GamePanel extends JPanel implements GamePanel2D{
     private Point point;
     private CameraListener cameraListener;
     private MouseGameListener mouseGameListener;
+    private int selected = 0;
+    private Rectangle selected1 = null, selected2 = null;
+    private Animal animalSelected = null;
+    private Structure2D structure2DSeleced = null;
 
     public GamePanel(int width, int height, int mapWidth, int mapHeight, Map map){
         optionalStatus = 0;
@@ -71,6 +77,16 @@ public class GamePanel extends JPanel implements GamePanel2D{
         for(Animal animal: map.animals_AI.getAnimals()){
             g2d.drawImage(map.graphicsHandler.getImage(animal.toString()), (int) animal.getX(), (int) animal.getY(), sWeight, sHeight, null);
         }
+
+        if(selected1 != null){
+            g2d.setColor(Color.GREEN);
+            g2d.fill(selected1);
+        }
+
+        if(selected2 != null){
+            g2d.setColor(Color.red);
+            g2d.fill(selected2);
+        }
     }
 
     private void setTranslation(int rightWise, int upWise) {
@@ -90,8 +106,44 @@ public class GamePanel extends JPanel implements GamePanel2D{
         point.y = (int) (mouseGameListener.getY() - transY);
 
         if(exitListener.isEscaped()) status = -1;
-    }
 
+        if(mouseGameListener.isClicked()){
+            Point m = new Point(mouseGameListener.getX(), mouseGameListener.getY());
+            if(selected == 0){
+                for (Animal animal: map.animals_AI.getAnimals()){
+                    if(new Rectangle( (int) animal.getX(), (int) animal.getY(), animal.getWidth(), animal.getHeight()).contains(m)){
+                        selected = 1;
+                        selected1 =  new Rectangle( (int) animal.getX(), (int) animal.getY(), animal.getWidth(), animal.getHeight());
+                        animalSelected = animal;
+                    }
+                }
+            }
+            else if (selected == 1){
+                for(Title[] titles: map.titles){
+                    for(Title title: titles){
+                        if(title.getRectange(25, 25).contains(m)){
+                            selected2 = title.getRectange(25, 25);
+                            structure2DSeleced = title.getStructure();
+                            selected = 2;
+                        }
+                    }
+                }
+            }
+            else{
+                for(Animal a: map.animals_AI.getAnimals()){
+                    if(a.equals(animalSelected))
+                        a.setWay(map.animals_AI.SearchWayTo(structure2DSeleced,a));
+                }
+                structure2DSeleced = null;
+                animalSelected = null;
+                selected1 = null;
+                selected2 = null;
+                selected = 0;
+            }
+        }
+
+        map.animals_AI.update();
+    }
     @Override
     public void draw() {
         repaint();
