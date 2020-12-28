@@ -2,8 +2,10 @@ package gamepanles;
 
 import core.App;
 import creatures.animals.Animal;
+import debuger.DebugingObject;
 import gamepanles.panelListeners.CameraListener;
 import gamepanles.panelListeners.ExitListener;
+import gamepanles.panelListeners.KeyBindListener;
 import gamepanles.panelListeners.MouseGameListener;
 import map.Map;
 import map.ground.Title;
@@ -23,10 +25,10 @@ public class GamePanel extends JPanel implements GamePanel2D{
     private Point point;
     private CameraListener cameraListener;
     private MouseGameListener mouseGameListener;
+    private KeyBindListener keyBindListener;
     private int selected = 0;
-    private Rectangle selected1 = null, selected2 = null;
-    private Animal animalSelected = null;
-    private Structure2D structure2DSeleced = null;
+    private boolean debug = false;
+    private DebugingObject debugingObject;
 
     public GamePanel(int width, int height, int mapWidth, int mapHeight, Map map){
         optionalStatus = 0;
@@ -38,9 +40,11 @@ public class GamePanel extends JPanel implements GamePanel2D{
         status = 0;
         exitListener = new ExitListener();
         cameraListener = new CameraListener();
+        keyBindListener = new KeyBindListener();
         mouseGameListener = new MouseGameListener();
         addKeyListener(exitListener);
         addKeyListener(cameraListener);
+        addKeyListener(keyBindListener);
         addMouseListener(mouseGameListener);
         this.map = map;
         transX = 0;
@@ -79,15 +83,16 @@ public class GamePanel extends JPanel implements GamePanel2D{
             g2d.drawImage(map.graphicsHandler.getImage(animal.toString()), (int) animal.getX(), (int) animal.getY(), sWeight, sHeight, null);
         }
 
-        if(selected1 != null){
-            g2d.setColor(Color.GREEN);
-            g2d.fill(selected1);
+        /* DEBUGER DRAWING */
+        if(debug){
+            g2d.setColor(Color.WHITE);
+            int h = g2d.getFontMetrics().getHeight() - (int) transY;
+            for(String lines : debugingObject.getCornerText().split(System.lineSeparator())){
+                g2d.drawString(lines, (int) -transX, h);
+                h += g2d.getFontMetrics().getHeight();
+            }
         }
 
-        if(selected2 != null){
-            g2d.setColor(Color.red);
-            g2d.fill(selected2);
-        }
     }
 
     private void setTranslation(int rightWise, int upWise) {
@@ -101,6 +106,8 @@ public class GamePanel extends JPanel implements GamePanel2D{
     @Override
     public void update() {
 
+        debug = keyBindListener.isDebugOn();
+
         setTranslation(cameraListener.getTranslateX(), cameraListener.getTranslateY());
 
         point.x = (int) (mouseGameListener.getX() - transX);
@@ -109,37 +116,26 @@ public class GamePanel extends JPanel implements GamePanel2D{
         if(exitListener.isEscaped()) status = -1;
 
         if(mouseGameListener.isClicked()){
-            Point m = new Point(mouseGameListener.getX(), mouseGameListener.getY());
-            if(selected == 0){
-                for (Animal animal: map.animals_AI.getAnimals()){
-                    if(new Rectangle( (int) animal.getX(), (int) animal.getY(), animal.getWidth(), animal.getHeight()).contains(m)){
-                        selected = 1;
-                        selected1 =  new Rectangle( (int) animal.getX(), (int) animal.getY(), animal.getWidth(), animal.getHeight());
-                        animalSelected = animal;
-                    }
+            boolean finded = false;
+            Point point = new Point(mouseGameListener.getX(), mouseGameListener.getY());
+            for (Animal animal : map.animals_AI.getAnimals()){
+                if(new Rectangle((int) animal.getX(), (int) animal.getY(), 25, 25).contains(point)){
+                    debugingObject = new DebugingObject(animal);
+                    finded = true;
+                    break;
                 }
             }
-            else if (selected == 1){
-                for(Title[] titles: map.titles){
-                    for(Title title: titles){
-                        if(title.getRectange(25, 25).contains(m)){
-                            selected2 = title.getRectange(25, 25);
-                            structure2DSeleced = title.getStructure();
-                            selected = 2;
+
+            if(!finded){
+                for(Title[] titles : map.titles){
+                    for(Title title : titles){
+                        if(title.getRectange(25, 25).contains(point)){
+                            debugingObject = new DebugingObject(title);
+                            finded = true;
+                            break;
                         }
                     }
                 }
-            }
-            else{
-                for(Animal a: map.animals_AI.getAnimals()){
-                    if(a.equals(animalSelected))
-                        a.setWay(map.animals_AI.searchWayTo(structure2DSeleced,a));
-                }
-                structure2DSeleced = null;
-                animalSelected = null;
-                selected1 = null;
-                selected2 = null;
-                selected = 0;
             }
         }
 
