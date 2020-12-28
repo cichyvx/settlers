@@ -23,7 +23,10 @@ public class AI {
         return animals;
     }
 
-    public <T extends Structure2D, Y extends Animal> List<Title> SearchWayTo(T searching, Y animal){
+    public <T extends Structure2D, Y extends Animal> List<Title> searchWayTo(T searching, Y animal){
+        if(searching == null)
+            return null;
+
         AiNode finishedNode = null;
         Point point = new Point((int)animal.getX(), (int)animal.getY());
         AiNode starting = null;
@@ -50,9 +53,21 @@ public class AI {
         while (finishedNode == null){
             List<AiNode> nextNodes = new ArrayList<>();
             for(AiNode node: nodes){
+                boolean up = node.i - 1 >= 0, right = node.j < map.titles[node.i].length,
+                        bottom = node.i + 1 < map.titles.length, left = node.j - 1 >= 0;
+
+
+                /* up - left */
+                if(up && left){
+                    if(map.titles[node.i - 1][node.j - 1].isWalking() && !isVisited(map.titles[node.i - 1][node.j - 1], visited)){
+                        AiNode newnode = new AiNode(node.i - 1, node.j - 1, node, map.titles[node.i - 1][node.j - 1].getStructure());
+                        nextNodes.add(newnode);
+                    }
+                    visited.add(map.titles[node.i - 1][node.j - 1]);
+                }
 
                 /* up */
-                if(node.i - 1 >= 0){
+                if(up){
                     if(map.titles[node.i - 1][node.j].isWalking() && !isVisited(map.titles[node.i - 1][node.j], visited)){
                         AiNode newnode = new AiNode(node.i - 1, node.j, node, map.titles[node.i - 1][node.j].getStructure());
                         nextNodes.add(newnode);
@@ -60,8 +75,17 @@ public class AI {
                     visited.add(map.titles[node.i - 1][node.j]);
                 }
 
+                /* up - right */
+                if(up && right){
+                    if(map.titles[node.i - 1][node.j + 1].isWalking() && !isVisited(map.titles[node.i - 1][node.j + 1], visited)){
+                        AiNode newnode = new AiNode(node.i - 1, node.j + 1, node, map.titles[node.i - 1][node.j + 1].getStructure());
+                        nextNodes.add(newnode);
+                    }
+                    visited.add(map.titles[node.i - 1][node.j + 1]);
+                }
+
                 /* right */
-                if(node.j + 1 < map.titles[node.i].length){
+                if(right){
                     if(map.titles[node.i][node.j + 1].isWalking() && !isVisited(map.titles[node.i][node.j + 1], visited)){
                         AiNode newnode = new AiNode(node.i, node.j + 1, node, map.titles[node.i][node.j + 1].getStructure());
                         nextNodes.add(newnode);
@@ -69,8 +93,17 @@ public class AI {
                     visited.add(map.titles[node.i][node.j + 1]);
                 }
 
+                /* bottom - right */
+                if(bottom && right){
+                    if(map.titles[node.i + 1][node.j + 1].isWalking() && !isVisited(map.titles[node.i + 1][node.j + 1], visited)){
+                        AiNode newnode = new AiNode(node.i + 1, node.j + 1, node, map.titles[node.i + 1][node.j + 1].getStructure());
+                        nextNodes.add(newnode);
+                    }
+                    visited.add(map.titles[node.i + 1][node.j + 1]);
+                }
+
                 /* bottom */
-                if(node.i + 1 < map.titles.length){
+                if(bottom){
                     if(map.titles[node.i + 1][node.j].isWalking() && !isVisited(map.titles[node.i + 1][node.j], visited)){
                         AiNode newnode = new AiNode(node.i + 1, node.j, node, map.titles[node.i + 1][node.j].getStructure());
                         nextNodes.add(newnode);
@@ -78,8 +111,17 @@ public class AI {
                     visited.add(map.titles[node.i + 1][node.j]);
                 }
 
+                /* bottom - left */
+                if(bottom && left){
+                    if(map.titles[node.i + 1][node.j - 1].isWalking() && !isVisited(map.titles[node.i + 1][node.j - 1], visited)){
+                        AiNode newnode = new AiNode(node.i + 1, node.j - 1, node, map.titles[node.i + 1][node.j - 1].getStructure());
+                        nextNodes.add(newnode);
+                    }
+                    visited.add(map.titles[node.i + 1][node.j - 1]);
+                }
+
                 /* left */
-                if(node.j - 1 >= 0){
+                if(left){
                     if(map.titles[node.i][node.j - 1].isWalking() && !isVisited(map.titles[node.i][node.j - 1], visited)){
                         AiNode newnode = new AiNode(node.i, node.j - 1, node, map.titles[node.i][node.j - 1].getStructure());
                         nextNodes.add(newnode);
@@ -131,7 +173,27 @@ public class AI {
     }
 
     public void update() {
-        for(Animal animal: animals)
+        for(Animal animal: animals){
             animal.update();
+
+            if (animal.needFood() && !animal.isFoodSearch()){
+                animal.setWay(searchWayTo(Structure2D.getStructure("PLANT"), animal));
+                animal.foodSearch(true);
+            }
+
+            else if(animal.needFood()){
+                for (int i = 0; i < map.titles.length; i++){
+                    for(int j = 0; j < map.titles[i].length; j++){
+                        if(map.titles[i][j].getRectange(25, 25).contains(animal.getX(), animal.getY())){
+                            animal.eat(map.titles[i][j].getStructure());
+                            map.titles[i][j].deleteStructure();
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+        }
     }
 }
