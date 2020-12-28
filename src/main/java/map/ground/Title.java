@@ -1,10 +1,11 @@
 package map.ground;
 
+import debuger.SettlerDebuger;
 import map.structures.Structure2D;
 
 import java.awt.*;
 
-public interface Title {
+public interface Title extends SettlerDebuger {
 
     int DEFAULT = 1;
     int GRASS = 2;

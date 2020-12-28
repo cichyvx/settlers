@@ -1,11 +1,12 @@
 package creatures.animals;
 
+import debuger.SettlerDebuger;
 import map.ground.Title;
 import map.structures.Structure2D;
 
 import java.util.List;
 
-public interface Animal {
+public interface Animal extends SettlerDebuger {
 
     static Animal getAnimal(int selected) {
         switch (selected){

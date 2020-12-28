@@ -1,6 +1,8 @@
 package map.structures;
 
-public interface Structure2D {
+import debuger.SettlerDebuger;
+
+public interface Structure2D extends SettlerDebuger {
     int TREE = 1;
     int PLANT = 2;
 
