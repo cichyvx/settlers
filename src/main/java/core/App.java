@@ -10,13 +10,12 @@ public class App extends JFrame implements Runnable{
 
     private final int MENU = 0, GAME = 5, MAPSETTING = 2, OPTION = 3, EDITOR = 4, GAMECHOICE = 1;
 
-    public static boolean fullscrean;
     private static int dimension;
+    public static final int sWidth = 25, sHeight = 25;
 
-    private int status,optionalStatus;
+    private int status, optionalStatus;
     private final static String TITLE = "Settler game";
     public static final Dimension[] dimensins = new Dimension[3];
-    private final short updateTime = 15;
     private GamePanel gamePanel;
     private EditorPane editorPanel;
     private OptionsPane optionPane;
@@ -62,6 +61,9 @@ public class App extends JFrame implements Runnable{
 
     }
 
+
+    public static boolean fullscrean;
+
     private void changeFullScrean(){
         if(fullscrean) {
             device.setFullScreenWindow(null);
@@ -79,6 +81,7 @@ public class App extends JFrame implements Runnable{
     public App(){
         status = 0;
         RUNNING = true;
+
         this.setResizable(false);
         this.setTitle(TITLE);
         this.setUndecorated(true);
@@ -93,80 +96,86 @@ public class App extends JFrame implements Runnable{
     }
 
     private void removeC(){
-        switch (this.status){
-            case MENU:
+        switch (this.status) {
+            case MENU -> {
                 remove(menuPanel);
                 menuPanel = null;
-                break;
-            case GAME:
+            }
+            case GAME -> {
                 remove(gamePanel);
                 gamePanel = null;
-                break;
-            case MAPSETTING:
+            }
+            case MAPSETTING -> {
                 remove(mapSettingPanel);
                 mapWidth = mapSettingPanel.getMapWidth();
                 mapHeight = mapSettingPanel.getMapHeight();
                 nRiver = mapSettingPanel.getRiverCount();
                 nRock = mapSettingPanel.getRockCount();
                 mapSettingPanel = null;
-                break;
-            case OPTION:
+            }
+            case OPTION -> {
                 remove(optionPane);
                 optionPane = null;
-                break;
-            case EDITOR:
+            }
+            case EDITOR -> {
                 remove(editorPanel);
                 editorPanel = null;
-                break;
-            case GAMECHOICE:
+            }
+            case GAMECHOICE -> {
                 remove(gamechoicePane);
                 mapWidth = gamechoicePane.getMapSize();
                 mapHeight = gamechoicePane.getMapSize();
                 mapName = gamechoicePane.getMapName();
                 gamechoicePane = null;
-                break;
+            }
         }
     }
 
     private void changeStatus(int status){
         removeC();
-        switch (status){
-            case MENU:
+
+        switch (status) {
+            case MENU -> {
                 this.status = MENU;
                 menuPanel = new MenuPanel(this.getWidth(), this.getHeight());
                 this.add(menuPanel).requestFocus();
-                break;
-            case GAME:
+            }
+
+            case GAME -> {
                 this.status = GAME;
-                if(mapName.equals("")) {
-                    Map map = new Map(mapWidth, mapHeight, 25, 25, true, 3, 3);
-                    this.gamePanel = new GamePanel(this.getWidth(), this.getHeight(), 25, 25, map);
-                }
-                else this.gamePanel = new GamePanel(this.getWidth(), this.getHeight(), 25, 25, Map.loadMap(mapName));
+                if (mapName.equals("")) {
+                    Map map = new Map(mapWidth, mapHeight, sWidth, sHeight, true, 3, 3);
+                    this.gamePanel = new GamePanel(this.getWidth(), this.getHeight(), sWidth, sHeight, map);
+                } else
+                    this.gamePanel = new GamePanel(this.getWidth(), this.getHeight(), sWidth, sHeight, Map.loadMap(mapName));
                 this.add(gamePanel).requestFocus();
-                break;
-            case MAPSETTING:
+            }
+
+            case MAPSETTING -> {
                 this.status = MAPSETTING;
                 this.mapSettingPanel = new MapSettingPanel(optionalStatus);
                 this.add(mapSettingPanel).requestFocus();
-                break;
-            case OPTION:
+            }
+
+            case OPTION -> {
                 this.status = OPTION;
                 this.optionPane = new OptionsPane(this.getWidth(), this.getHeight());
                 this.add(optionPane).requestFocus();
-                break;
-            case EDITOR:
+            }
+
+            case EDITOR -> {
                 this.status = EDITOR;
                 this.editorPanel = new EditorPane(this.getWidth(), this.getHeight(), mapWidth, mapHeight, nRiver, nRock);
                 this.add(editorPanel).requestFocus();
-                break;
-            case GAMECHOICE:
+            }
+
+            case GAMECHOICE -> {
                 this.status = GAMECHOICE;
                 this.gamechoicePane = new GamechoicePane();
                 this.add(gamechoicePane).requestFocus();
-                break;
-            case -1:
-                System.exit(0);
+            }
+
+            case -1 -> System.exit(0);
         }
         this.revalidate();
     }
@@ -178,10 +187,13 @@ public class App extends JFrame implements Runnable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         menuPanel.update();
         menuPanel.repaint();
+
         int menuStatus = menuPanel.getStatus();
         int menuOptional = menuPanel.getOptionalStatus();
+
         if (menuStatus != 0) {
             optionalStatus = menuOptional;
             changeStatus(menuStatus);
@@ -189,41 +201,40 @@ public class App extends JFrame implements Runnable{
 
     }
 
-    // state 1
+    /* STAGE 1 */
     private void gameUpdate(){
         gamePanel.update();
         gamePanel.draw();
-        if(gamePanel.getStatus() == -1){
-            //gamePanel = null;
+
+        if(gamePanel.getStatus() == -1)
             changeStatus(MENU);
-        }
     }
 
-    // state 2
+    /* STAGE 2 */
     private void editorUpdate(){
         editorPanel.update();
         editorPanel.draw();
-        if(editorPanel.getStatus() == -1){
-            //editorPanel = null;
+
+        if(editorPanel.getStatus() == -1)
             changeStatus(MENU);
-        }
     }
 
-    // state 3
+    /* STAGE 3 */
     private void optiopUpdate(){
         optionPane.update();
         optionPane.draw();
+
         int optionOptional = optionPane.getOptionalStatus();
-        if(optionPane.getStatus() == -1){
-            //optionPane = null;
+
+        if(optionPane.getStatus() == -1)
             changeStatus(MENU);
-        }
-        if(optionOptional == 1){
+
+        if(optionOptional == 1)
             changeFullScrean();
-        }
-        else if(optionOptional == 2){
+
+        else if(optionOptional == 2)
             nextDim();
-        }
+
         else if(optionOptional == 3){
 
         }
@@ -232,8 +243,10 @@ public class App extends JFrame implements Runnable{
     private void mapSettingUpdate(){
         mapSettingPanel.update();
         mapSettingPanel.draw();
+
         if(mapSettingPanel.getStatus() == 1)
             changeStatus(EDITOR);
+
         else if(mapSettingPanel.getStatus() == -1)
             changeStatus(MENU);
     }
@@ -241,34 +254,23 @@ public class App extends JFrame implements Runnable{
     private void gamechoicePaneUpdate(){
         gamechoicePane.update();
         gamechoicePane.draw();
+
         if(gamechoicePane.getStatus() == 1)
             changeStatus(GAME);
+
         else if(gamechoicePane.getStatus() == -1)
             changeStatus(MENU);
     }
 
     private void update() {
-        switch (status){
-            case MENU:
-                menuUpdate();
-                break;
-            case GAME:
-                gameUpdate();
-                break;
-            case MAPSETTING:
-                mapSettingUpdate();
-                break;
-            case OPTION:
-                optiopUpdate();
-                break;
-            case EDITOR:
-                editorUpdate();
-                break;
-            case GAMECHOICE:
-                gamechoicePaneUpdate();
-                break;
-            case -1:
-                System.exit(0);
+        switch (status) {
+            case MENU -> menuUpdate();
+            case GAME -> gameUpdate();
+            case MAPSETTING -> mapSettingUpdate();
+            case OPTION -> optiopUpdate();
+            case EDITOR -> editorUpdate();
+            case GAMECHOICE -> gamechoicePaneUpdate();
+            case -1 -> System.exit(0);
         }
     }
 
@@ -279,6 +281,7 @@ public class App extends JFrame implements Runnable{
             setBackground(Color.black);
 
             try {
+                short updateTime = 15;
                 Thread.sleep(updateTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
