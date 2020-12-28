@@ -5,6 +5,8 @@ import map.ground.Title;
 import map.structures.Structure2D;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 public abstract class Animal2D implements Animal, SettlerDebuger {
 
@@ -13,8 +15,12 @@ public abstract class Animal2D implements Animal, SettlerDebuger {
     List<Title> way;
     protected int timeToNextMove = 500, timeToHungry = 1000;
     protected long lastMove = 0, lastHungry = 0;
-    private short hungry = 0;
+    private short hungry;
     protected boolean foodSearching = false, eating = false;
+
+    public Animal2D(){
+        hungry = (short) (new Random().nextInt(10) + 30);
+    }
 
     @Override
     public void setX(double x) {
@@ -73,8 +79,10 @@ public abstract class Animal2D implements Animal, SettlerDebuger {
     }
 
     private void makeHungry(){
-        if(lastHungry + timeToHungry < System.currentTimeMillis() && hungry > 0)
+        if(lastHungry + timeToHungry < System.currentTimeMillis() && hungry > 0){
             hungry--;
+            lastHungry = System.currentTimeMillis();
+        }
     }
 
     @Override
@@ -94,7 +102,13 @@ public abstract class Animal2D implements Animal, SettlerDebuger {
 
     @Override
     public void eat(Structure2D structure) {
-        if(foodSearching && (way.isEmpty() || way == null)){
+        if(Objects.isNull(structure) && foodSearching){
+            if(way.isEmpty()){
+                foodSearching = false;
+                return;
+            }
+        }
+        if(foodSearching && way.isEmpty() && structure.toString().equals(Structure2D.getStructure(Structure2D.PLANT).toString())){
             eating = true;
             foodSearching = false;
             hungry += 50;
@@ -103,13 +117,16 @@ public abstract class Animal2D implements Animal, SettlerDebuger {
 
     @Override
     public String getCornerText() {
-        StringBuffer debugText = new StringBuffer();
+        StringBuilder debugText = new StringBuilder();
         debugText.append("position: x: " + x + " y: " + y + System.lineSeparator());
         debugText.append("Size: " + width + " x " + height + System.lineSeparator());
         debugText.append("Type: " + toString() + System.lineSeparator());
         debugText.append("hungry: " + hungry + System.lineSeparator());
         debugText.append("food search: " + (isFoodSearch()? "yes" : "no") + System.lineSeparator());
-        debugText.append("have way: " + (!(way.isEmpty() || way == null)? "yes" : "no") + System.lineSeparator());
+        if(way != null)
+            debugText.append("have way: " +(!way.isEmpty()? "yes" : "no") + System.lineSeparator());
+        else
+            debugText.append("have way: " + "no" + System.lineSeparator());
         return debugText.toString();
     }
 
