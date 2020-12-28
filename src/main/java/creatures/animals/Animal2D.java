@@ -1,11 +1,12 @@
 package creatures.animals;
 
+import debuger.SettlerDebuger;
 import map.ground.Title;
 import map.structures.Structure2D;
 
 import java.util.List;
 
-public abstract class Animal2D implements Animal{
+public abstract class Animal2D implements Animal, SettlerDebuger {
 
     protected double x, y;
     protected int width, height;
@@ -98,6 +99,18 @@ public abstract class Animal2D implements Animal{
             foodSearching = false;
             hungry += 50;
         }
+    }
+
+    @Override
+    public String getCornerText() {
+        StringBuffer debugText = new StringBuffer();
+        debugText.append("position: x: " + x + " y: " + y + System.lineSeparator());
+        debugText.append("Size: " + width + " x " + height + System.lineSeparator());
+        debugText.append("Type: " + toString() + System.lineSeparator());
+        debugText.append("hungry: " + hungry + System.lineSeparator());
+        debugText.append("food search: " + (isFoodSearch()? "yes" : "no") + System.lineSeparator());
+        debugText.append("have way: " + (!(way.isEmpty() || way == null)? "yes" : "no") + System.lineSeparator());
+        return debugText.toString();
     }
 
     @Override

@@ -1,10 +1,11 @@
 package map.ground;
 
+import debuger.SettlerDebuger;
 import map.structures.Structure2D;
 
 import java.awt.*;
 
-public class DefaultTitle implements Title{
+public class DefaultTitle implements Title, SettlerDebuger {
 
     private final int x,y;
     Structure2D structure;
@@ -69,5 +70,17 @@ public class DefaultTitle implements Title{
     @Override
     public Rectangle getRectange(int width, int height) {
         return new Rectangle(x, y, width, height);
+    }
+
+    @Override
+    public String getCornerText() {
+        StringBuffer debugText = new StringBuffer();
+        debugText.append("position: x: " + x + " y: " + y + System.lineSeparator());
+        debugText.append("Size: " + 25 + " x " + 25 + System.lineSeparator());
+        debugText.append("Type: " + toString() + System.lineSeparator());
+        debugText.append("destroyable: " + (isDestroyable()? "yes" : "no") + System.lineSeparator());
+        debugText.append("walkable: " + (isDestroyable()? "yes" : "no") + System.lineSeparator());
+        debugText.append("structure: " + (haveObject()? structure.getCornerText() : "no") + System.lineSeparator());
+        return debugText.toString();
     }
 }
