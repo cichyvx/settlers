@@ -1,5 +1,6 @@
 package gamepanles;
 
+import core.App;
 import creatures.animals.Animal;
 import gamepanles.panelListeners.CameraListener;
 import gamepanles.panelListeners.ExitListener;
@@ -132,7 +133,7 @@ public class GamePanel extends JPanel implements GamePanel2D{
             else{
                 for(Animal a: map.animals_AI.getAnimals()){
                     if(a.equals(animalSelected))
-                        a.setWay(map.animals_AI.SearchWayTo(structure2DSeleced,a));
+                        a.setWay(map.animals_AI.searchWayTo(structure2DSeleced,a));
                 }
                 structure2DSeleced = null;
                 animalSelected = null;

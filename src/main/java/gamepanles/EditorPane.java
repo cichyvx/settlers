@@ -1,5 +1,6 @@
 package gamepanles;
 
+
 import creatures.animals.Animal;
 import gamepanles.panelListeners.*;
 import map.Map;
