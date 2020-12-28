@@ -1,6 +1,7 @@
 package creatures.animals;
 
 import map.ground.Title;
+import map.structures.Structure2D;
 
 import java.util.List;
 
@@ -29,15 +30,21 @@ public interface Animal {
     int getWidth();
     int getHeight();
 
+    boolean needFood();
+
     void setX(double x);
     void setY(double y);
     void setWeight(int weight);
     void setHeight(int height);
     void setWay(List<Title> titles);
     void update();
+    void eat(Structure2D structure);
 
     static int getAnimalsCount(){
         return 1;
     }
 
+    boolean isFoodSearch();
+
+    void foodSearch(boolean b);
 }
