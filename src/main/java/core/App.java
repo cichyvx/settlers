@@ -91,7 +91,6 @@ public class App extends JFrame implements Runnable{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.menuPanel = new MenuPanel(this.getWidth(), this.getHeight());
         this.add(menuPanel);
-
         pack();
         device.setFullScreenWindow(this);
         config();

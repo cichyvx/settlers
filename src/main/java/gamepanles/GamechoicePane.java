@@ -2,11 +2,13 @@ package gamepanles;
 
 import gamepanles.panelListeners.ExitListener;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
+import java.io.IOException;
 
 
 public class GamechoicePane extends JPanel implements GamePanel2D{
@@ -122,7 +124,6 @@ public class GamechoicePane extends JPanel implements GamePanel2D{
 
         return "";
     }
-
 
     @Override
     public void update() {

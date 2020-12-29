@@ -1,14 +1,19 @@
 package gamepanles;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 public class MenuPanel extends JPanel implements GamePanel2D{
 
     private final int WIDTH, HEIGHT;
     private int status = 0,optionalStatus;
+
+    private Image wallpaper;
 
     private JButton[] buttons;
     private final String[] buttonsText = {"Start Game", "Map Editor", "Optios", "Exit"};
@@ -19,6 +24,13 @@ public class MenuPanel extends JPanel implements GamePanel2D{
         HEIGHT = height;
         this.setSize(width, height);
         this.setVisible(true);
+
+        try {
+            wallpaper = ImageIO.read(new File("resources\\app\\mainScreen\\mainWallpaper.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         //this.setLayout(new BorderLayout());
         buttons = new JButton[buttonsText.length];
 
@@ -55,11 +67,13 @@ public class MenuPanel extends JPanel implements GamePanel2D{
         this.status = status;
     }
 
-//    @Override
-//    protected void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        Graphics2D g2d = (Graphics2D) g;
-//    }
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.drawImage(wallpaper, 0, 0, this.getWidth(), this.getHeight(), null);
+    }
 
     @Override
     public void update() {
