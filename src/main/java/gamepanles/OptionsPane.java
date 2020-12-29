@@ -30,11 +30,19 @@ public class OptionsPane extends JPanel implements GamePanel2D {
         fullscsreen.addActionListener( (e) ->{
             this.requestFocus();
             optionalStatus = 1;
+            fullscsreen.revalidate();
+            dimension.revalidate();
+            fullscsreen.setText("Fullscrean: " + String.valueOf(App.isFullscrean()));
+            dimension.setText("Resoluton: "+App.getDimension().width+" x "+App.getDimension().height);
         });
 
         dimension.addActionListener((e) -> {
             this.requestFocus();
             optionalStatus = 2;
+            fullscsreen.revalidate();
+            dimension.revalidate();
+            fullscsreen.setText("Fullscrean: " + String.valueOf(App.isFullscrean()));
+            dimension.setText("Resoluton: "+App.getDimension().width+" x "+App.getDimension().height);
         });
 
         this.add(dimension);

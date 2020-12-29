@@ -35,6 +35,8 @@ public class App extends JFrame implements Runnable{
     }
 
     private void nextDim(){
+        fullscrean = true;
+        changeFullScrean();
         if(dimension + 1 < dimensins.length)
             dimension++;
         else
@@ -42,6 +44,7 @@ public class App extends JFrame implements Runnable{
 
         this.setSize(dimensins[dimension]);
         changeStatus(OPTION);
+
     }
 
 
