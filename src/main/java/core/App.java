@@ -39,10 +39,9 @@ public class App extends JFrame implements Runnable{
             dimension++;
         else
             dimension = 0;
-        if(!isFullscrean()){
-            this.setSize(dimensins[dimension]);
-            changeStatus(OPTION);
-        }
+
+        this.setSize(dimensins[dimension]);
+        changeStatus(OPTION);
     }
 
 
