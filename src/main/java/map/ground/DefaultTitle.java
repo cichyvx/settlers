@@ -74,13 +74,31 @@ public class DefaultTitle implements Title, SettlerDebuger {
 
     @Override
     public String getCornerText() {
-        StringBuffer debugText = new StringBuffer();
-        debugText.append("position: x: " + x + " y: " + y + System.lineSeparator());
-        debugText.append("Size: " + 25 + " x " + 25 + System.lineSeparator());
-        debugText.append("Type: " + toString() + System.lineSeparator());
-        debugText.append("destroyable: " + (isDestroyable()? "yes" : "no") + System.lineSeparator());
-        debugText.append("walkable: " + (isDestroyable()? "yes" : "no") + System.lineSeparator());
-        debugText.append("structure: " + (haveObject()? structure.getCornerText() : "no") + System.lineSeparator());
+        StringBuilder debugText = new StringBuilder();
+
+        debugText.append("position: x: ")
+                .append(x).append(" y: ")
+                .append(y).append(System.lineSeparator());
+
+        debugText.append("Size: " + 25 + " x " + 25)
+                .append(System.lineSeparator());
+
+        debugText.append("Type: ")
+                .append(toString())
+                .append(System.lineSeparator());
+
+        debugText.append("destroyable: ")
+                .append(isDestroyable() ? "yes" : "no")
+                .append(System.lineSeparator());
+
+        debugText.append("walkable: ")
+                .append(isDestroyable() ? "yes" : "no")
+                .append(System.lineSeparator());
+
+        debugText.append("structure: ")
+                .append(haveObject() ? structure.getCornerText() : "no")
+                .append(System.lineSeparator());
+
         return debugText.toString();
     }
 }

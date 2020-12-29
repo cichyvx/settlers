@@ -30,26 +30,41 @@ public class Map {
     public AI animals_AI;
     public final transient  GraphicsHandler graphicsHandler;
 
-    /* Emnpty map.Map */
-    public Map(int weight, int height, int sWeight, int sHeight, boolean random){
-        WIDTH = weight;
+    /* EMPTY MAP
+    *   @param   weight  horizontal number of fields
+    *   @param   height  vertical number of fields
+    *   @param  sWidth  horizontal size of a single field
+    *   @param  sHeight  vertical size of a single field
+    *   @param  random  true if a generator is to be used, false if the map is to be filled with one type
+     */
+    public Map(int width, int height, int sWidth, int sHeight, boolean random){
+        WIDTH = width;
         HEIGHT = height;
 
         name = "empty map";
         autor = "";
         description = "map created by editor";
-        titles = new Title[weight][height];
+        titles = new Title[width][height];
         if(random){
-            titles = generateMap(sWeight, sHeight);
+            titles = generateMap(sWidth, sHeight);
         }
         else {
-            titles = fillAllMap(sWeight, sHeight);
+            titles = fillAllMap(sWidth, sHeight);
         }
         graphicsHandler = new GraphicsHandler();
         animals_AI = new AI(this);
     }
 
-    /* random map */
+    /* RANDOM GENERATED MAP
+     *   @param   weight  horizontal number of fields
+     *   @param   height  vertical number of fields
+     *   @param  sWidth  horizontal size of a single field
+     *   @param  sHeight  vertical size of a single field
+     *   @param  random  true if a generator is to be used, false if the map is to be filled with one type
+     *   @param  nRiver  number of rivers to be generated
+     *   @param  nRock  number of rock to be generated
+     *      (rocks can overlap each other giving the impression that it is one element)
+     */
     public Map(int weight, int height, int sWeight, int sHeight, boolean random, int nRiver, int nRock){
         WIDTH = weight;
         HEIGHT = height;
@@ -68,46 +83,61 @@ public class Map {
         animals_AI = new AI(this);
     }
 
-    private Title[][] generateRock(Title[][] tab, int sWeight, int sHeight, int count){
+    /*
+    *   @param  tab  the fields where rock are to be generated
+    *   @param  sWidth  horizontal size of a single field
+    *   @param  sHeight  vertical size of a single field
+    *   @param  count  number of rock to be generated
+    */
+
+    private Title[][] generateRock(Title[][] tab, int sWidth, int sHeight, int count){
 
         Random r = new Random();
         final String name = new RockTitle(0,0).toString();
         final int chance = 50;
         /* number of rivers */
         for(int k = count; k != 0; k--){
-            int startingX = r.nextInt(sWeight);
+            int startingX = r.nextInt(sWidth);
             int startingY = r.nextInt(sHeight);
 
             for(int i = 0; i < HEIGHT; i++){
                 for(int j = 0; j < WIDTH; j++){
                     if(startingX == j && startingY == i)
-                        tab[i][j] = new RockTitle(sWeight * j, i * sHeight);
+                        tab[i][j] = new RockTitle(sWidth * j, i * sHeight);
 
                     if(j - 1 >= 0 )
                         if(tab[i][j-1].toString().equals(name))
                             if(r.nextInt(100)<chance)
-                                tab[i][j] = new RockTitle(sWeight * j, i * sHeight);
+                                tab[i][j] = new RockTitle(sWidth * j, i * sHeight);
 
-                    if(j + 1 < sWeight)
+                    if(j + 1 < sWidth)
                         if(tab[i][j+1].toString().equals(name))
                             if(r.nextInt(100) < chance)
-                                tab[i][j] = new RockTitle(sWeight * j, i * sHeight);
+                                tab[i][j] = new RockTitle(sWidth * j, i * sHeight);
 
                     if(i + 1 < tab.length)
                         if(tab[i+1][j].toString().equals(name))
                             if(r.nextInt(100)<chance)
-                                tab[i][j] = new RockTitle(sWeight * j, i * sHeight);
+                                tab[i][j] = new RockTitle(sWidth * j, i * sHeight);
 
                     if(i - 1 >= 0)
                         if(tab[i-1][j].toString().equals(name))
                             if(r.nextInt(100)<chance)
-                                tab[i][j] = new RockTitle(sWeight * j, i * sHeight);
+                                tab[i][j] = new RockTitle(sWidth * j, i * sHeight);
                 }
             }
         }
 
         return tab;
     }
+
+    /*
+     *   @param  tab  the fields where rock are to be generated
+     *   @param  sWidth  horizontal size of a single field
+     *   @param  sHeight  vertical size of a single field
+     *   @param  count  number of river to be generated
+     */
+
 
     private Title[][] generateWater(Title[][] tab, int sWeight, int sHeight, int count){
         Random r = new Random();
@@ -181,6 +211,13 @@ public class Map {
 
     }
 
+    /*
+     *   @param  tab  the fields where rock are to be generated
+     *   @param  sWidth  horizontal size of a single field
+     *   @param  sHeight  vertical size of a single field
+     */
+
+
     private Title[][] generateSand(Title[][] tab, int sWeight, int sHeight){
 
         for(int i = 0; i < HEIGHT; i++){
@@ -196,6 +233,13 @@ public class Map {
 
         return tab;
     }
+
+    /*
+     *   @param  tab  the fields where rock are to be generated
+     *   @param  sWidth  horizontal size of a single field
+     *   @param  sHeight  vertical size of a single field
+     */
+
 
     private Title[][] generateTrees(Title[][] tab, int sWeight, int sHeight){
         Random r = new Random();
@@ -213,6 +257,13 @@ public class Map {
         System.out.println(count);
         return tab;
     }
+
+    /*
+     *   @param  tab  the fields where rock are to be generated
+     *   @param  sWidth  horizontal size of a single field
+     *   @param  sHeight  vertical size of a single field
+     */
+
 
     private Title[][] generatePlants(Title[][] tab, int sWeight, int sHeight){
         Random r = new Random();
