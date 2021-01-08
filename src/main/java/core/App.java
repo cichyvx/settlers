@@ -31,7 +31,7 @@ public class App extends JFrame implements Runnable{
     public static boolean isFullscrean() {return fullscrean;}
 
     public static Dimension getDimension(){
-        return dimensins[dimension];
+        return isFullscrean()? Toolkit.getDefaultToolkit().getScreenSize() : dimensins[dimension];
     }
 
     private void nextDim(){
