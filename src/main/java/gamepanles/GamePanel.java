@@ -9,10 +9,10 @@ import gamepanles.panelListeners.KeyBindListener;
 import gamepanles.panelListeners.MouseGameListener;
 import map.Map;
 import map.ground.Title;
-import map.structures.Structure2D;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class GamePanel extends JPanel implements GamePanel2D{
 
@@ -52,11 +52,9 @@ public class GamePanel extends JPanel implements GamePanel2D{
         point = new Point();
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-
+    private BufferedImage test(){
+        BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = img.createGraphics();
         g2d.translate(transX, transY);
         //g2d.scale(scale, scale); // scale will be added soon
 
@@ -64,12 +62,16 @@ public class GamePanel extends JPanel implements GamePanel2D{
         g2d.fillRect(-WIDTH, -HEIGHT, WIDTH * WIDTH, HEIGHT * HEIGHT);
         g2d.setBackground(Color.black);
 
-
         /* MAP DRAWING */
+        first:
         for (int i = 0; i < map.getHEIGHT(); i++) {
             for (int j = 0; j < map.getWIDTH(); j++) {
                 int x = map.titles[i][j].getX();
                 int y = map.titles[i][j].getY();
+                if(y + App.sHeight < -transY) break;
+                if(y - App.sHeight> -transY + App.getDimension().getHeight()) break first;
+                if(x + App.sWidth< -transX) continue;
+                if(x - App.sWidth> -transX + App.getDimension().width) break;
                 g2d.drawImage(map.graphicsHandler.getImage(map.titles[i][j].toString()), x, y, sWeight, sHeight, null);
                 if (map.titles[i][j].haveObject()) {
                     g2d.drawImage(map.graphicsHandler.getImage(map.titles[i][j].getStructure().toString()), x, y, sWeight, sHeight, null);
@@ -92,6 +94,17 @@ public class GamePanel extends JPanel implements GamePanel2D{
                 h += g2d.getFontMetrics().getHeight();
             }
         }
+        g2d.dispose();
+        return img;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+
+        g2d.drawImage(test(), 0, 0, WIDTH, HEIGHT, null);
+        //g2d.drawImage(image, 0, 0, WIDTH, HEIGHT, null);
 
     }
 
@@ -101,6 +114,15 @@ public class GamePanel extends JPanel implements GamePanel2D{
 
         if (rightWise > 0) transX += 2;
         if (rightWise < 0) transX -= 2;
+
+        if(-transX + App.getDimension().width > map.getWIDTH() * App.sWidth) transX = App.getDimension().width - (map.getWIDTH() * App.sWidth);
+        if(transX > 0) transX = 0;
+
+        if(transY > 0) transY = 0;
+
+        System.out.println(transX + " , " + transY);
+        System.out.println(App.getDimension().width + " , " + map.getWIDTH() * App.sWidth);
+
     }
 
     @Override
@@ -115,6 +137,7 @@ public class GamePanel extends JPanel implements GamePanel2D{
 
         if(exitListener.isEscaped()) status = -1;
 
+        /*
         if(mouseGameListener.isClicked()){
             boolean finded = false;
             Point point = new Point(mouseGameListener.getX(), mouseGameListener.getY());
@@ -138,8 +161,14 @@ public class GamePanel extends JPanel implements GamePanel2D{
                 }
             }
         }
+         */
 
-        map.animals_AI.update();
+        if(mouseGameListener.isClicked())
+           clickerFinder.run();
+
+        //map.animals_AI.update(); //16604 - 16702, 16680 - 16703
+        animalUpdater.run();
+
     }
     @Override
     public void draw() {
@@ -155,4 +184,38 @@ public class GamePanel extends JPanel implements GamePanel2D{
     public int getOptionalStatus() {
         return optionalStatus;
     }
+
+    private final Thread animalUpdater = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            map.animals_AI.update();
+        }
+    });
+
+    private final Thread clickerFinder = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            boolean finded = false;
+            Point point = new Point(mouseGameListener.getX(), mouseGameListener.getY());
+            for (Animal animal : map.animals_AI.getAnimals()){
+                if(new Rectangle((int) animal.getX(), (int) animal.getY(), 25, 25).contains(point)){
+                    debugingObject = new DebugingObject(animal);
+                    finded = true;
+                    break;
+                }
+            }
+
+            if(!finded){
+                for(Title[] titles : map.titles){
+                    for(Title title : titles){
+                        if(title.getRectange(25, 25).contains(point)){
+                            debugingObject = new DebugingObject(title);
+                            finded = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
