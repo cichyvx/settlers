@@ -7,20 +7,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class OptionsPane extends JPanel implements GamePanel2D {
+public class OptionsPane extends DefaultPanel{
 
     private final int WIDTH, HEIGHT;
-    private int status,optionalStatus;
     private ExitListener exitListener;
 
     private JButton fullscsreen, dimension;
 
     public OptionsPane(int width, int height){
-        optionalStatus = 0;
         this.WIDTH = width;
         this.HEIGHT = height;
-        this.status = 0;
-        this.optionalStatus = 0;
         exitListener = new ExitListener();
         addKeyListener(exitListener);
 
@@ -29,7 +25,7 @@ public class OptionsPane extends JPanel implements GamePanel2D {
 
         fullscsreen.addActionListener( (e) ->{
             this.requestFocus();
-            optionalStatus = 1;
+            setOptionalStatus(1);
             fullscsreen.revalidate();
             dimension.revalidate();
             fullscsreen.setText("Fullscrean: " + String.valueOf(App.isFullscrean()));
@@ -38,7 +34,7 @@ public class OptionsPane extends JPanel implements GamePanel2D {
 
         dimension.addActionListener((e) -> {
             this.requestFocus();
-            optionalStatus = 2;
+            setOptionalStatus(2);
             fullscsreen.revalidate();
             dimension.revalidate();
             fullscsreen.setText("Fullscrean: " + String.valueOf(App.isFullscrean()));
@@ -50,13 +46,6 @@ public class OptionsPane extends JPanel implements GamePanel2D {
 
     }
 
-    @Override
-    public int getOptionalStatus() {
-        if(optionalStatus == 0) return optionalStatus;
-        final int x = optionalStatus;
-        optionalStatus = 0;
-        return x;
-    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -69,7 +58,7 @@ public class OptionsPane extends JPanel implements GamePanel2D {
 
     @Override
     public void update() {
-        if(exitListener.isEscaped()) status = -1;
+        if(exitListener.isEscaped()) setStatus(-1);
 
         fullscsreen.setText(String.valueOf(App.isFullscrean()));
     }
@@ -79,8 +68,4 @@ public class OptionsPane extends JPanel implements GamePanel2D {
         repaint();
     }
 
-    @Override
-    public int getStatus() {
-        return status;
-    }
 }

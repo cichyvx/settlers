@@ -2,28 +2,23 @@ package gamepanles;
 
 import gamepanles.panelListeners.ExitListener;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
-import java.io.IOException;
 
 
-public class GamechoicePane extends JPanel implements GamePanel2D{
+public class GamechoicePane extends DefaultPanel implements GamePanel2D{
 
     final private ExitListener exitListener;
-    private int status;
-    private final int optionalStatus;
     private final JRadioButton[] choiceButtons;
     private int selected;
     private JSlider sliderMapSize;
     private int size;
 
     public GamechoicePane(){
-        this.status = 0;
-        this.optionalStatus = 0;
+        super();
         selected = 0;
         size = 50;
 
@@ -127,7 +122,7 @@ public class GamechoicePane extends JPanel implements GamePanel2D{
 
     @Override
     public void update() {
-        if(exitListener.isEscaped()) status = -1;
+        if(exitListener.isEscaped()) setStatus(-1);
     }
 
     @Override
@@ -135,13 +130,4 @@ public class GamechoicePane extends JPanel implements GamePanel2D{
         repaint();
     }
 
-    @Override
-    public int getStatus() {
-        return status;
-    }
-
-    @Override
-    public int getOptionalStatus() {
-        return optionalStatus;
-    }
 }

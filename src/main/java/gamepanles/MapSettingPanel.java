@@ -5,7 +5,7 @@ import gamepanles.panelListeners.ExitListener;
 import javax.swing.*;
 import java.awt.*;
 
-public class MapSettingPanel extends JPanel implements GamePanel2D{
+public class MapSettingPanel extends DefaultPanel{
 
     private JButton applyButton;
     private JSlider widthSlider,heightSlider,riverSlider,rockSlider;
@@ -15,11 +15,8 @@ public class MapSettingPanel extends JPanel implements GamePanel2D{
 
     private int mapWidth, mapHeight, riverCount, rockCount;
 
-    private int status,optionalStatus;
-
     public MapSettingPanel(int optionalStatus){
-        status = 0;
-        this.optionalStatus = optionalStatus;
+        super();
         mapWidth = 50;
         mapHeight = 50;
         riverCount = 3;
@@ -42,7 +39,7 @@ public class MapSettingPanel extends JPanel implements GamePanel2D{
 
 
         applyButton = new JButton("apply");
-        applyButton.addActionListener(e -> this.status = 1);
+        applyButton.addActionListener(e -> setStatus(-1));
 
         widthSlider.addChangeListener(e -> widthText.setText("Map Width : " + widthSlider.getValue()));
 
@@ -87,7 +84,7 @@ public class MapSettingPanel extends JPanel implements GamePanel2D{
 
     @Override
     public void update() {
-        if(exitListener.isEscaped()) status = -1;
+        if(exitListener.isEscaped()) setStatus(-1);
     }
 
     @Override
@@ -95,13 +92,4 @@ public class MapSettingPanel extends JPanel implements GamePanel2D{
         this.repaint();
     }
 
-    @Override
-    public int getStatus() {
-        return status;
-    }
-
-    @Override
-    public int getOptionalStatus() {
-        return optionalStatus;
-    }
 }

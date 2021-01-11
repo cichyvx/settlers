@@ -7,15 +7,13 @@ import map.Map;
 import map.ground.Title;
 import map.structures.Structure2D;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class EditorPane extends JPanel implements GamePanel2D {
+public class EditorPane extends DefaultPanel{
 
     private final int WIDTH, HEIGHT;
     private double transX, transY;
-    private int status, optionalStatus;
     private final ExitListener exitListener;
     private final CameraListener cameraListener;
     private ExitingEditorPane exitingEditorPane;
@@ -31,12 +29,11 @@ public class EditorPane extends JPanel implements GamePanel2D {
     private final Map map;
 
     public EditorPane(int width, int height, int mapWidth, int mapHeight, int nRiver, int nRock) {
+        super();
         point = new Point(0,0);
         exiting = false;
-        optionalStatus = 0;
         this.WIDTH = width;
         this.HEIGHT = height;
-        status = 0;
 
         exitListener = new ExitListener();
         cameraListener = new CameraListener();
@@ -206,14 +203,5 @@ public class EditorPane extends JPanel implements GamePanel2D {
         repaint();
     }
 
-    @Override
-    public int getStatus() {
-        return status;
-    }
-
-    @Override
-    public int getOptionalStatus () {
-        return optionalStatus;
-    }
 
 }

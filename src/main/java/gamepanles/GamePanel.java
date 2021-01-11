@@ -14,10 +14,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class GamePanel extends JPanel implements GamePanel2D{
+public class GamePanel extends DefaultPanel{
 
     private final int WIDTH, HEIGHT;
-    private int status,optionalStatus;
     private ExitListener exitListener;
     private final int sWeight, sHeight;
     private final Map map;
@@ -31,13 +30,12 @@ public class GamePanel extends JPanel implements GamePanel2D{
     private DebugingObject debugingObject;
 
     public GamePanel(int width, int height, int mapWidth, int mapHeight, Map map){
-        optionalStatus = 0;
+        super();
         this.setSize(width, height);
         this.WIDTH = width;
         this.HEIGHT = height;
         this.sWeight = mapWidth;
         this.sHeight = mapHeight;
-        status = 0;
         exitListener = new ExitListener();
         cameraListener = new CameraListener();
         keyBindListener = new KeyBindListener();
@@ -135,7 +133,7 @@ public class GamePanel extends JPanel implements GamePanel2D{
         point.x = (int) (mouseGameListener.getX() - transX);
         point.y = (int) (mouseGameListener.getY() - transY);
 
-        if(exitListener.isEscaped()) status = -1;
+        if(exitListener.isEscaped()) setStatus(-1);
 
         /*
         if(mouseGameListener.isClicked()){
@@ -164,7 +162,7 @@ public class GamePanel extends JPanel implements GamePanel2D{
          */
 
         if(mouseGameListener.isClicked())
-           clickerFinder.run();
+            clickerFinder.run();
 
         //map.animals_AI.update(); //16604 - 16702, 16680 - 16703
         animalUpdater.run();
@@ -175,15 +173,6 @@ public class GamePanel extends JPanel implements GamePanel2D{
         repaint();
     }
 
-    @Override
-    public int getStatus() {
-        return status;
-    }
-
-    @Override
-    public int getOptionalStatus() {
-        return optionalStatus;
-    }
 
     private final Thread animalUpdater = new Thread(new Runnable() {
         @Override

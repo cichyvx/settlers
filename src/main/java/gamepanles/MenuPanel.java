@@ -8,10 +8,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-public class MenuPanel extends JPanel implements GamePanel2D{
+public class MenuPanel extends DefaultPanel{
 
     private final int WIDTH, HEIGHT;
-    private int status = 0,optionalStatus;
 
     private Image wallpaper;
 
@@ -19,7 +18,7 @@ public class MenuPanel extends JPanel implements GamePanel2D{
     private final String[] buttonsText = {"Start Game", "Map Editor", "Optios", "Exit"};
 
     public MenuPanel(int width, int height){
-        optionalStatus = 0;
+        super();
         WIDTH = width;
         HEIGHT = height;
         this.setSize(width, height);
@@ -63,10 +62,6 @@ public class MenuPanel extends JPanel implements GamePanel2D{
 
     }
 
-    private void setStatus(int status){
-        this.status = status;
-    }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -85,13 +80,4 @@ public class MenuPanel extends JPanel implements GamePanel2D{
         repaint();
     }
 
-    @Override
-    public int getStatus() {
-        return status;
-    }
-
-    @Override
-    public int getOptionalStatus() {
-        return optionalStatus;
-    }
 }
