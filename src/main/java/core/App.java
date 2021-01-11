@@ -81,6 +81,7 @@ public class App extends JFrame implements Runnable{
     }
 
     public App(){
+        System.setProperty("sun.java2d.opengl", "true");
         status = 0;
         RUNNING = true;
 
