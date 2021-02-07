@@ -39,7 +39,7 @@ public class MapSettingPanel extends DefaultPanel{
 
 
         applyButton = new JButton("apply");
-        applyButton.addActionListener(e -> setStatus(-1));
+        applyButton.addActionListener(e -> setStatus(1));
 
         widthSlider.addChangeListener(e -> widthText.setText("Map Width : " + widthSlider.getValue()));
 
