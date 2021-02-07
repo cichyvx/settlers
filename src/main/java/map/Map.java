@@ -53,6 +53,7 @@ public class Map {
         }
         graphicsHandler = new GraphicsHandler();
         animals_AI = new AI(this);
+        animals_AI.generateAnimals();
     }
 
     /* RANDOM GENERATED MAP
@@ -81,6 +82,7 @@ public class Map {
         }
         graphicsHandler = new GraphicsHandler();
         animals_AI = new AI(this);
+        animals_AI.generateAnimals();
     }
 
     /*
@@ -293,7 +295,6 @@ public class Map {
         tab = generateSand(tab, sWeight, sHeight);
         tab = generateTrees(tab, sWeight, sHeight);
         tab = generatePlants(tab, sWeight, sHeight);
-
 
         return tab;
     }
