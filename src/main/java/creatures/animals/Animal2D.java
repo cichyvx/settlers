@@ -15,7 +15,7 @@ public abstract class Animal2D implements Animal, SettlerDebuger {
 
     List<Title> way;
 
-    protected int timeToNextMove = 500, timeToHungry = 1000;
+    protected int timeToNextMove = 500, timeToHungry = 5000;
     protected long lastMove = 0, lastHungry = 0;
     private short hungry;
     protected boolean foodSearching = false, eating = false;
