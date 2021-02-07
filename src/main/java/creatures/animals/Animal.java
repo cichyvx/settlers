@@ -5,6 +5,7 @@ import map.ground.Title;
 import map.structures.Structure2D;
 
 import java.util.List;
+import java.util.Random;
 
 public interface Animal extends SettlerDebuger {
 
@@ -24,6 +25,10 @@ public interface Animal extends SettlerDebuger {
             default:
                 return new Cow(0,0,0,0);
         }
+    }
+
+    static Animal getRandomAnimal() {
+        return getAnimal(Math.abs(new Random().nextInt(getAnimalsCount() ) ));
     }
 
     double getX();
