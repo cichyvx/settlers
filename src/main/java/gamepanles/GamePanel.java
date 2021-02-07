@@ -118,9 +118,6 @@ public class GamePanel extends DefaultPanel{
 
         if(transY > 0) transY = 0;
 
-        System.out.println(transX + " , " + transY);
-        System.out.println(App.getDimension().width + " , " + map.getWIDTH() * App.sWidth);
-
     }
 
     @Override
