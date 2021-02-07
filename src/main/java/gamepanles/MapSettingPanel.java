@@ -75,11 +75,11 @@ public class MapSettingPanel extends DefaultPanel{
     }
 
     public int getRiverCount(){
-        return riverCount;
+        return riverSlider.getValue();
     }
 
     public int getRockCount(){
-        return rockCount;
+        return rockSlider.getValue();
     }
 
     @Override
