@@ -278,12 +278,12 @@ public class App extends JFrame implements Runnable{
 
     @Override
     public void run() {
+        short updateTime = 10;
         while (RUNNING){
             update();
             setBackground(Color.black);
 
             try {
-                short updateTime = 15;
                 Thread.sleep(updateTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
