@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class AI {
     private Map map;
@@ -194,6 +195,24 @@ public class AI {
             }
 
 
+        }
+    }
+
+    public void generateAnimals() {
+        int animalCount = new Random().nextInt(20) + 20;
+        Point point = new Point();
+        Random r = new Random();
+        for (int i = 0; i < animalCount; i++){
+            Title title;
+            do{
+                title = map.titles[r.nextInt(map.titles.length - 1) + 1][r.nextInt(map.titles[0].length - 1) + 1];
+            }while (!title.isWalking());
+            point.x = title.getX();
+            point.y = title.getY();
+            Animal animal = Animal.getRandomAnimal();
+            animal.setX(point.x);
+            animal.setY(point.y);
+            animals.add(animal);
         }
     }
 }
