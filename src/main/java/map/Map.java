@@ -131,84 +131,72 @@ public class Map {
         return tab;
     }
 
+
     /*
-     *   @param  tab  the fields where rock are to be generated
-     *   @param  sWidth  horizontal size of a single field
-     *   @param  sHeight  vertical size of a single field
-     *   @param  count  number of river to be generated
+    *   @param  tab  the fields where rivers are to be generated
+    *   @param  sWidth  horizontal size of a single field
+    *   @param  sHeight  vertical size of a single field
+    *   @param  count  number of river to be generated
+    *   the method is used for mapping rivers
      */
-
-
     private Title[][] generateWater(Title[][] tab, int sWeight, int sHeight, int count){
-        Random r = new Random();
-        /* number of rivers */
-        for(int k = count; k > 0; k--){
-
-            int startingX = r.nextInt(WIDTH); // position where river is begin in top of mao
-            final int size = r.nextInt(3) + 3; // vertical size of river
-            int rightChance = r.nextInt(69)+ 1 ; // chance to change of direction river to right
-            int leftChance;
-            int next = -1;
-
-            for(int i = 0; i < HEIGHT; i++){
-                secondloop:
-                for(int j = 0; j < WIDTH; j++){
-
-                    if(j == startingX && next == -1){
-                        int l;
-                        for(l = j; l < j + size; l++){
-                            if(l >= WIDTH) {
-                                next = startingX;
-                                break;
-                            }
-                            tab[i][l] = new WaterTitle(l * sWeight, i * sHeight);
-                        }
-                        next = startingX;
-                        break;
-                    }
-
-                    else {
-                        if(j == next){
-                            //right direction
-                            if(r.nextInt(100) < rightChance){
-                                if(j + 1 < WIDTH){
-                                    for(int l = 1; l < size + 1; l++){
-                                        if(l + j >= WIDTH) break;
-                                        tab[i][l + j] = new WaterTitle((l + j) * sWeight, i * sHeight);
-                                    }
-                                    next ++;
-                                }
-                            }
-
-                            //left direction
-                            else if(r.nextBoolean()){
-                                if(j - size - 1 >= 0){
-                                    for(int l = j  - 1; l < j - 1 + size; l++){
-                                        if(l + 1 >= WIDTH) break;
-                                        tab[i][l] = new WaterTitle(l * sWeight, i * sHeight);
-                                    }
-                                    next --;
-                                }
-                            }
-
-                            //straight direction
-                            else{
-                                for(int l = next; l < next + size; l++){
-                                    if(l + 1 >= WIDTH) break;
-                                    tab[i][l] = new WaterTitle(l * sWeight, i * sHeight);
-                                }
-                            }
-                            break ;
-                        }
-
-                            //break ;
-                    }
-                }
-            }
+        /*
+        loop that creates the number of rivers specified in the parameter
+         */
+        for(int i = 0; i < count; i++){
+            if(new Random().nextBoolean())
+                tab = generateRiversFormUp(tab, sWeight, sHeight);
+            else
+                tab = generateRiversFromRight(tab, sWeight, sHeight);
         }
 
         return tab;
+    }
 
+    private Title[][] generateRiversFormUp(Title[][] tab, int sWeight, int sHeight){
+        int riverWidth = new Random().nextInt(8) + 2;
+        int startPoint = new Random().nextInt(WIDTH - 1) + 1;
+        for(int i = 0; i < HEIGHT; i++){
+            for(int j = startPoint; j < startPoint + riverWidth; j++){
+                if(j + 1 >= WIDTH){
+                    startPoint -= 3;
+                    break;
+                }
+                tab[i][j] = new WaterTitle(i * sWeight, j * sHeight);
+            }
+            if(new Random().nextBoolean()){
+                if(startPoint - 1 >= 0)
+                    startPoint --;
+            }
+            else
+            if(startPoint + 1 < WIDTH)
+                startPoint ++;
+        }
+        return tab;
+    }
+
+    private Title[][] generateRiversFromRight(Title[][] tab, int sWeight, int sHeight){
+        int riverWidth = new Random().nextInt(8) + 2;
+        int startPoint = new Random().nextInt(HEIGHT - 1) + 1;
+
+        for(int i = 0; i < WIDTH; i++){
+            for(int j = startPoint; j < startPoint + riverWidth; j++){
+                if(j + 1 >= HEIGHT){
+                    startPoint -= 3;
+                    break;
+                }
+                tab[j][i] = new WaterTitle(i * sWeight, j * sHeight);
+            }
+            if(new Random().nextBoolean()){
+                if(startPoint - 1 >= 0)
+                    startPoint --;
+            }
+            else
+            if(startPoint + 1 < HEIGHT)
+                startPoint ++;
+        }
+
+        return tab;
     }
 
     /*
