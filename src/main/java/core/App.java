@@ -5,6 +5,7 @@ import map.Map;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 public class App extends JFrame implements Runnable{
 
@@ -146,7 +147,7 @@ public class App extends JFrame implements Runnable{
             case GAME -> {
                 this.status = GAME;
                 if (mapName.equals("")) {
-                    Map map = new Map(mapWidth, mapHeight, sWidth, sHeight, true, 3, 3);
+                    Map map = new Map(mapWidth, mapHeight, sWidth, sHeight, new Random().nextInt(2) + 2, new Random().nextInt(2) + 2);
                     this.gamePanel = new GamePanel(this.getWidth(), this.getHeight(), sWidth, sHeight, map);
                 } else
                     this.gamePanel = new GamePanel(this.getWidth(), this.getHeight(), sWidth, sHeight, Map.loadMap(mapName));
