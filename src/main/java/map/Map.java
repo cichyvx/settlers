@@ -37,7 +37,7 @@ public class Map {
     *   @param  sHeight  vertical size of a single field
     *   @param  random  true if a generator is to be used, false if the map is to be filled with one type
      */
-    public Map(int width, int height, int sWidth, int sHeight, boolean random){
+    public Map(int width, int height, int sWidth, int sHeight){
         WIDTH = width;
         HEIGHT = height;
 
@@ -45,12 +45,7 @@ public class Map {
         autor = "";
         description = "map created by editor";
         titles = new Title[width][height];
-        if(random){
-            titles = generateMap(sWidth, sHeight);
-        }
-        else {
-            titles = fillAllMap(sWidth, sHeight);
-        }
+        titles = fillAllMap(sWidth, sHeight);
         graphicsHandler = new GraphicsHandler();
         animals_AI = new AI(this);
         animals_AI.generateAnimals();
@@ -66,7 +61,7 @@ public class Map {
      *   @param  nRock  number of rock to be generated
      *      (rocks can overlap each other giving the impression that it is one element)
      */
-    public Map(int weight, int height, int sWeight, int sHeight, boolean random, int nRiver, int nRock){
+    public Map(int weight, int height, int sWeight, int sHeight, int nRiver, int nRock){
         WIDTH = weight;
         HEIGHT = height;
 
@@ -74,12 +69,7 @@ public class Map {
         autor = "";
         description = "map created by editor";
         titles = new Title[weight][height];
-        if(random){
-            titles = generateMap(sWeight, sHeight, nRiver, nRock);
-        }
-        else {
-            titles = fillAllMap(sWeight, sHeight);
-        }
+        generateMap(sWeight, sHeight, nRiver, nRock);
         graphicsHandler = new GraphicsHandler();
         animals_AI = new AI(this);
         animals_AI.generateAnimals();
@@ -164,7 +154,7 @@ public class Map {
                     startPoint -= 3;
                     break;
                 }
-                tab[i][j] = new WaterTitle(i * sWeight, j * sHeight);
+                tab[i][j] = new WaterTitle(j * sWeight, i * sHeight);
             }
             if(new Random().nextBoolean()){
                 if(startPoint - 1 >= 0)
@@ -427,7 +417,7 @@ public class Map {
             animals.add(AnimalConventer.AgetAnimal(animalConv));
         }
 
-        map = new Map(width, height, 25, 25, false);
+        map = new Map(width, height, 25, 25);
         map.setName(titleHolder.name);
         map.setDescription(titleHolder.description);
         map.setAutor(titleHolder.autor);
