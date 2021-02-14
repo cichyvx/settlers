@@ -43,7 +43,7 @@ public class EditorPane extends DefaultPanel{
         initializeKeyListeners();
         initializeSettings();
 
-        map = new Map(mapWidth, mapHeight, sWeight, sHeight, true, nRiver, nRock);
+        map = new Map(mapWidth, mapHeight, sWeight, sHeight, nRiver, nRock);
     }
 
     private void initializeKeyListeners(){
