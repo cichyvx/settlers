@@ -102,6 +102,7 @@ public class GamePanel extends DefaultPanel{
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.drawImage(test(), 0, 0, WIDTH, HEIGHT, null);
+        g2d.dispose();
         //g2d.drawImage(image, 0, 0, WIDTH, HEIGHT, null);
 
     }
