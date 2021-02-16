@@ -54,6 +54,8 @@ public interface Title extends SettlerDebuger {
     void addStructure(Structure2D structure);
     void deleteStructure();
     public Rectangle getRectange(int width, int height);
+
+    void generateRandomStructure();
     //public Object getObjectClass();
     //public void setObject(Object object);
 
