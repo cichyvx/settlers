@@ -24,7 +24,10 @@ public class AI {
         return animals;
     }
 
-    public <T extends Structure2D, Y extends Animal> List<Title> searchWayTo(T searching, Y animal){
+
+    //todo remove bug with Array index out of bounds
+
+    public <T extends Structure2D, Y extends Animal> List<Title> searchWayTo(T searching, Y animal) throws ArrayIndexOutOfBoundsException{
         if(searching == null)
             return null;
 
