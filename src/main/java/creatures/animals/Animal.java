@@ -4,6 +4,7 @@ import debuger.SettlerDebuger;
 import map.ground.Title;
 import map.structures.Structure2D;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -53,4 +54,6 @@ public interface Animal extends SettlerDebuger {
     boolean isFoodSearch();
 
     void foodSearch(boolean b);
+
+    ArrayList<Structure2D> getFoodList();
 }
