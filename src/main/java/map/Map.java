@@ -234,7 +234,6 @@ public class Map {
                 }
             }
         }
-        System.out.println(count);
         return tab;
     }
 
@@ -283,10 +282,26 @@ public class Map {
         tab = generateRock(tab, sWeight, sHeight, nRock);
         tab = generateWater(tab, sWeight, sHeight, nRiver);
         tab = generateSand(tab, sWeight, sHeight);
-        tab = generateTrees(tab, sWeight, sHeight);
-        tab = generatePlants(tab, sWeight, sHeight);
+        tab = generateStructures(tab, sWeight, sHeight);
+        //tab = generateTrees(tab, sWeight, sHeight);
+        //tab = generatePlants(tab, sWeight, sHeight);
 
         return tab;
+    }
+
+    private Title[][] generateStructures(Title[][] tab, int sWeight, int sHeight) {
+
+        Random r = new Random();
+        for(int i = 0; i < HEIGHT; i++){
+            for(int j = 0; j < WIDTH; j++){
+                if(r.nextInt(100) > 70) {
+                    tab[i][j].generateRandomStructure();
+                }
+            }
+        }
+
+        return tab;
+
     }
 
     public int getWIDTH(){
