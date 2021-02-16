@@ -27,7 +27,7 @@ public class AI {
 
     //todo remove bug with Array index out of bounds
 
-    public <T extends Structure2D, Y extends Animal> List<Title> searchWayTo(T searching, Y animal) throws ArrayIndexOutOfBoundsException{
+    public <T extends Structure2D, Y extends Animal> List<Title> searchWayTo(ArrayList<T> searching, Y animal) throws ArrayIndexOutOfBoundsException{
         if(searching == null)
             return null;
 
@@ -141,9 +141,11 @@ public class AI {
             for(AiNode node: nextNodes){
                 if(node.type == null)
                     continue;
-                if(node.type.toString().equals(searching.toString())){
-                    finishedNode = node;
-                    break;
+                for(Structure2D struct: searching){
+                    if(node.type.toString().equals(struct.toString())){
+                        finishedNode = node;
+                        break;
+                    }
                 }
             }
 
@@ -181,8 +183,10 @@ public class AI {
             animal.update();
 
             if (animal.needFood() && !animal.isFoodSearch()){
-                animal.setWay(searchWayTo(Structure2D.getStructure("PLANT"), animal));
-                animal.foodSearch(true);
+                try{
+                    animal.setWay(searchWayTo(animal.getFoodList(), animal));
+                    animal.foodSearch(true);
+                }catch (ArrayIndexOutOfBoundsException ignore){}
             }
 
             else if(animal.needFood()){
