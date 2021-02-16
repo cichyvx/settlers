@@ -2,6 +2,7 @@ package creatures.animals;
 
 import debuger.SettlerDebuger;
 import map.ground.Title;
+import map.structures.BerriesStructure;
 import map.structures.PlantStructure;
 import map.structures.Structure2D;
 
@@ -167,7 +168,7 @@ public abstract class Animal2D implements Animal, SettlerDebuger {
         ArrayList<Structure2D> list = new ArrayList<>();
         if(this.getClass().equals(Cow.class)){
             list.add(new PlantStructure());
-            list.add(new PlantStructure());
+            list.add(new BerriesStructure());
         }
         return list;
     }
