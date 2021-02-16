@@ -4,6 +4,9 @@ import debuger.SettlerDebuger;
 import map.structures.Structure2D;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class DefaultTitle implements Title, SettlerDebuger {
 
@@ -14,6 +17,29 @@ public class DefaultTitle implements Title, SettlerDebuger {
         this.x = x;
         this.y = y;
         structure = null;
+    }
+
+    private ArrayList<Integer> avalibeStruct() {
+        ArrayList<Integer> list = new ArrayList<>();
+        Class c = this.getClass();
+        if(c.equals(DefaultTitle.class)){
+            //do nothing
+        }
+        else if(c.equals(GrassTitle.class)){
+            list.add(Structure2D.TREE);
+            list.add(Structure2D.PLANT);
+            list.add(Structure2D.BERRIES);
+        }
+        else if(c.equals(RockTitle.class)){
+            //do nothing
+        }
+        else if(c.equals(SandTitle.class)){
+            //do nothing
+        }
+        else if(c.equals(WaterTitle.class)){
+            //do nothing
+        }
+        return list;
     }
 
     @Override
@@ -70,6 +96,18 @@ public class DefaultTitle implements Title, SettlerDebuger {
     @Override
     public Rectangle getRectange(int width, int height) {
         return new Rectangle(x, y, width, height);
+    }
+
+    @Override
+    public void generateRandomStructure() {
+        ArrayList<Integer> list = avalibeStruct();
+
+        if(list.size() == 0)
+            return;
+
+        Random r = new Random();
+        int rand = r.nextInt(list.size() + 1);
+        structure = Structure2D.getStructure(rand);
     }
 
     @Override
