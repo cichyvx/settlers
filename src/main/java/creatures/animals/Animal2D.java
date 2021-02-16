@@ -2,8 +2,10 @@ package creatures.animals;
 
 import debuger.SettlerDebuger;
 import map.ground.Title;
+import map.structures.PlantStructure;
 import map.structures.Structure2D;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -83,7 +85,7 @@ public abstract class Animal2D implements Animal, SettlerDebuger {
 
     private void makeHungry(){
         if(lastHungry + timeToHungry < System.currentTimeMillis() && hungry > 0){
-            hungry--;
+            hungry-=5100;
             lastHungry = System.currentTimeMillis();
         }
     }
@@ -106,6 +108,11 @@ public abstract class Animal2D implements Animal, SettlerDebuger {
     @Override
     public void eat(Structure2D structure) {
         if(Objects.isNull(structure) && foodSearching){
+            if(way == null){
+                foodSearching = false;
+                System.err.println("CANT FIND WAY OR SOMTHING ELSE FIX THIS LATER");
+                return;
+            }
             if(way.isEmpty()){
                 foodSearching = false;
                 return;
@@ -153,6 +160,16 @@ public abstract class Animal2D implements Animal, SettlerDebuger {
                     .append(System.lineSeparator());
 
         return debugText.toString();
+    }
+
+    @Override
+    public ArrayList<Structure2D> getFoodList() {
+        ArrayList<Structure2D> list = new ArrayList<>();
+        if(this.getClass().equals(Cow.class)){
+            list.add(new PlantStructure());
+            list.add(new PlantStructure());
+        }
+        return list;
     }
 
     @Override
