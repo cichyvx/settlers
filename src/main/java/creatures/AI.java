@@ -15,10 +15,19 @@ public class AI {
     private Map map;
     private List<Animal> animals;
 
+    /**
+     *
+     * @param map the map on which the AI is supposed to work
+     */
+
     public AI(Map map){
         this.map = map;
         animals = new ArrayList<>();
     }
+
+    /**
+     * @return a list of all animals on the map
+     */
 
     public List<Animal> getAnimals(){
         return animals;
@@ -26,6 +35,16 @@ public class AI {
 
 
     //todo remove bug with Array index out of bounds
+
+    /**
+     * method used to find the nearest desired fields for a specific animal
+     * @param searching the list of structures we are looking for
+     * @param animal the animal that is looking for
+     * @param <T> any structure
+     * @param <Y> any animal
+     * @return list of fields leading to the nearest structure searched
+     * @throws ArrayIndexOutOfBoundsException when it cannot find any of the searched structures
+     */
 
     public <T extends Structure2D, Y extends Animal> List<Title> searchWayTo(ArrayList<T> searching, Y animal) throws ArrayIndexOutOfBoundsException{
         if(searching == null)
@@ -162,6 +181,12 @@ public class AI {
         return finished;
     }
 
+    /**
+     * the method is used to check whether a given field is included in the list being searched
+     * @param title the field you are looking for
+     * @param visited list of visited fields
+     * @return returns true if the field is included in the list and false if not
+     */
     private boolean isVisited(Title title, List<Title> visited) {
         for(Title t: visited){
             if(t.equals(title))
@@ -170,14 +195,28 @@ public class AI {
         return false;
     }
 
+    /**
+     * replace current animal list with list from parameter
+     * @param animals new animal list
+     */
     public void setAnimals(List<Animal> animals){
         this.animals = animals;
     }
 
+    /**
+     * adding a new animal to the list
+     * @param animal a new animal to be added to the list
+     */
     public void add(Animal animal) {
         animals.add(animal);
     }
 
+    /**
+     * the method is used to update the current state of all animals on the list.
+     * the method performs the update method on each of the animals,
+     * then, if there is such a need,
+     * finds the necessary path for them or checks whether they have already reached their destination
+     */
     public void update() {
         for(Animal animal: animals){
             animal.update();
@@ -207,6 +246,9 @@ public class AI {
         }
     }
 
+    /**
+     * methods generates a random number of animals on the map
+     */
     public void generateAnimals() {
         int animalCount = new Random().nextInt(20) + 20;
         Point point = new Point();
