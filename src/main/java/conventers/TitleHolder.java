@@ -3,6 +3,10 @@ package conventers;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * the class is used to hold the entire map from conventered to safe object types
+ */
+
 public class TitleHolder {
     public final String name, autor, description;
     public final int width, height;
