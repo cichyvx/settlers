@@ -18,8 +18,8 @@ public abstract class Animal2D implements Animal, SettlerDebuger {
 
     List<Title> way;
 
-    protected int timeToNextMove = 500, timeToHungry = 5000;
-    protected long lastMove = 0, lastHungry = 0;
+    protected int timeToNextMove = 500, timeToHungry = 5000, timeToNextEat = 3000;
+    protected long lastMove = 0, lastHungry = 0, lastEat = 0;
     private short hungry;
     protected boolean foodSearching = false, eating = false;
 
@@ -108,14 +108,20 @@ public abstract class Animal2D implements Animal, SettlerDebuger {
 
     @Override
     public void eat(Structure2D structure) {
+        if(System.currentTimeMillis() < lastEat + timeToNextEat){
+            return;
+        }
         if(Objects.isNull(structure) && foodSearching){
             if(way == null){
                 foodSearching = false;
+                //todo fix that later
                 System.err.println("CANT FIND WAY OR SOMTHING ELSE FIX THIS LATER");
+                lastEat = System.currentTimeMillis();
                 return;
             }
             if(way.isEmpty()){
                 foodSearching = false;
+                lastEat = System.currentTimeMillis();
                 return;
             }
         }
