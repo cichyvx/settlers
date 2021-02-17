@@ -7,6 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
+/**
+ * the main class that manages everything,
+ * mainly deals with the proper management of JPanels
+ */
+
 public class App extends JFrame implements Runnable{
 
     private final int MENU = 0, GAME = 5, MAPSETTING = 2, OPTION = 3, EDITOR = 4, GAMECHOICE = 1;
@@ -29,12 +34,24 @@ public class App extends JFrame implements Runnable{
     private int mapWidth, mapHeight, nRiver, nRock;
     private String mapName;
 
+    /**
+     *
+     * @return true if fullscreen mode is enabled and false if the program is open in a window
+     */
+
     public static boolean isFullscrean() {return fullscrean;}
 
+    /**
+     *
+     * @return the current resolution
+     */
     public static Dimension getDimension(){
         return isFullscrean()? Toolkit.getDefaultToolkit().getScreenSize() : dimensins[dimension];
     }
 
+    /**
+     * sets the window resolution next in the queue
+     */
     private void nextDim(){
         fullscrean = true;
         changeFullScrean();
@@ -54,6 +71,9 @@ public class App extends JFrame implements Runnable{
         mainThread.start();
     }
 
+    /**
+     * one of the initialization methods sets the possible window resolutions
+     */
     private void config(){
         fullscrean = true;
 
@@ -67,6 +87,9 @@ public class App extends JFrame implements Runnable{
 
     public static boolean fullscrean;
 
+    /**
+     * changes window mode to full screen, or if already enabled, changes full screen to window
+     */
     private void changeFullScrean(){
         if(fullscrean) {
             device.setFullScreenWindow(null);
@@ -98,6 +121,9 @@ public class App extends JFrame implements Runnable{
         config();
     }
 
+    /**
+     * removes the current JPanel and, if needed, prepares variables for the next one
+     */
     private void removeC(){
         switch (this.status) {
             case MENU -> {
@@ -134,6 +160,10 @@ public class App extends JFrame implements Runnable{
         }
     }
 
+    /**
+     * replaces the current JPanel with another
+     * @param status id the JPanel to be used at the moment
+     */
     private void changeStatus(int status){
         removeC();
 
@@ -183,7 +213,10 @@ public class App extends JFrame implements Runnable{
         this.revalidate();
     }
 
-    // state 0
+    /**
+     * updates everything needed in the Updates panel,
+     * MenuPanel status is 0
+     */
     private void menuUpdate(){
         try {
             Thread.sleep(30);
@@ -204,7 +237,10 @@ public class App extends JFrame implements Runnable{
 
     }
 
-    /* STAGE 1 */
+    /**
+     * updates everything needed in the Updates panel,
+     * GamePanel status is 1
+     */
     private void gameUpdate(){
         gamePanel.update();
         gamePanel.draw();
@@ -213,7 +249,10 @@ public class App extends JFrame implements Runnable{
             changeStatus(MENU);
     }
 
-    /* STAGE 2 */
+    /**
+     * updates everything needed in the Updates panel,
+     * EditorPanel status is 2
+     */
     private void editorUpdate(){
         editorPanel.update();
         editorPanel.draw();
@@ -222,7 +261,10 @@ public class App extends JFrame implements Runnable{
             changeStatus(MENU);
     }
 
-    /* STAGE 3 */
+    /**
+     * updates everything needed in the Updates panel,
+     * OptionPanel status is 3
+     */
     private void optiopUpdate(){
         optionPane.update();
         optionPane.draw();
@@ -243,6 +285,10 @@ public class App extends JFrame implements Runnable{
         }
     }
 
+    /**
+     * updates everything needed in the Updates panel,
+     * MapSettingPanel status is 4
+     */
     private void mapSettingUpdate(){
         mapSettingPanel.update();
         mapSettingPanel.draw();
@@ -254,6 +300,10 @@ public class App extends JFrame implements Runnable{
             changeStatus(MENU);
     }
 
+    /**
+     * updates everything needed in the Updates panel,
+     * GameChoicePanel status is 5
+     */
     private void gamechoicePaneUpdate(){
         gamechoicePane.update();
         gamechoicePane.draw();
@@ -265,6 +315,9 @@ public class App extends JFrame implements Runnable{
             changeStatus(MENU);
     }
 
+    /**
+     * updates the corresponding panel by status
+     */
     private void update() {
         switch (status) {
             case MENU -> menuUpdate();
