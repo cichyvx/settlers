@@ -191,6 +191,8 @@ public class AI {
 
             else if(animal.needFood()){
                 for (int i = 0; i < map.titles.length; i++){
+                    if((int)animal.getX() < i * animal.getHeight())
+                        continue;
                     for(int j = 0; j < map.titles[i].length; j++){
                         if(map.titles[i][j].getRectange(25, 25).contains(animal.getX(), animal.getY())){
                             animal.eat(map.titles[i][j].getStructure());
