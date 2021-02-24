@@ -72,6 +72,10 @@ public abstract class Animal2D implements Animal, SettlerDebuger {
         this.way = titles;
     }
 
+    /**
+     * moves the animal to the first position on the list and then,
+     * removes the first item and replaces it with the next item
+     */
     protected void move(){
         if(way == null) return;
         if(way.isEmpty()) return;
@@ -84,9 +88,12 @@ public abstract class Animal2D implements Animal, SettlerDebuger {
         }
     }
 
+    /**
+     * increases the animal's hunger level (default by 5)
+     */
     private void makeHungry(){
         if(lastHungry + timeToHungry < System.currentTimeMillis() && hungry > 0){
-            hungry-=5100;
+            hungry -= 5 ;
             lastHungry = System.currentTimeMillis();
         }
     }

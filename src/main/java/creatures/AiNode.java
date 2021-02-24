@@ -3,9 +3,11 @@ package creatures;
 import map.ground.Title;
 import map.structures.Structure2D;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * the class works on the principle of an ordinary one-way list,
+ * where we only have access to its predecessor from the object
+ * @param <T> the object to be stored in this list item
+ */
 public class AiNode<T extends Structure2D & Title> {
     public final AiNode previous;
     public final int i,j;
