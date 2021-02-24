@@ -1,6 +1,6 @@
 package map.structures;
 
-public class PlantStructure extends TreeStructure{
+public class PlantStructure extends SettlerStructure{
 
     @Override
     public String toString() {

@@ -1,6 +1,8 @@
 package map.structures;
 
-public class TreeStructure extends SettlerStructure {
+import debuger.SettlerDebuger;
+
+public abstract class SettlerStructure implements Structure2D, SettlerDebuger {
 
     @Override
     public String getCornerText() {

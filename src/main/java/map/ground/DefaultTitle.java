@@ -29,15 +29,16 @@ public class DefaultTitle implements Title, SettlerDebuger {
             list.add(Structure2D.TREE);
             list.add(Structure2D.PLANT);
             list.add(Structure2D.BERRIES);
+            list.add(Structure2D.STONE);
         }
         else if(c.equals(RockTitle.class)){
-            //do nothing
+            list.add(Structure2D.STONE);
         }
         else if(c.equals(SandTitle.class)){
-            //do nothing
+            list.add(Structure2D.CACTUS);
         }
         else if(c.equals(WaterTitle.class)){
-            //do nothing
+            list.add(Structure2D.WATERLILY);
         }
         return list;
     }
@@ -106,8 +107,9 @@ public class DefaultTitle implements Title, SettlerDebuger {
             return;
 
         Random r = new Random();
-        int rand = r.nextInt(list.size() + 1);
+        int rand = list.get(r.nextInt(list.size()));
         structure = Structure2D.getStructure(rand);
+        System.out.println(rand);
     }
 
     @Override
