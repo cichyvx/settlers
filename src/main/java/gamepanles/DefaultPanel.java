@@ -2,8 +2,12 @@ package gamepanles;
 
 import javax.swing.*;
 
-public class DefaultPanel extends JPanel implements GamePanel2D{
+public abstract class DefaultPanel extends JPanel implements GamePanel2D{
 
+    /**
+     * status is used to signal the change of the Panel to another
+     * optionalStatus is used to signal changes to the current Panel or other global technical changes
+     */
     protected int status, optionalStatus;
 
     public DefaultPanel(){
@@ -11,11 +15,17 @@ public class DefaultPanel extends JPanel implements GamePanel2D{
         optionalStatus = 0;
     }
 
+    /**
+     * updating the current status of the Panel
+     */
     @Override
     public void update() {
 
     }
 
+    /**
+     * drawing Inside the graphics panel
+     */
     @Override
     public void draw() {
 

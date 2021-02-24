@@ -1,6 +1,7 @@
 package gamepanles;
 
 
+import core.App;
 import creatures.animals.Animal;
 import gamepanles.panelListeners.*;
 import map.Map;
@@ -58,8 +59,8 @@ public class EditorPane extends DefaultPanel{
     }
 
     private void initializeSettings(){
-        sWeight = 25;
-        sHeight = 25;
+        sWeight = App.sWidth;
+        sHeight = App.sHeight;
         transX = 0;
         transY = 0;
     }
