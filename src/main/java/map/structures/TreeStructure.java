@@ -10,4 +10,8 @@ public class TreeStructure extends SettlerStructure {
         return debugText.toString();
     }
 
+    @Override
+    public String toString() {
+        return "TREE";
+    }
 }
