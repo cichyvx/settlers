@@ -67,8 +67,10 @@ public class App extends JFrame implements Runnable{
 
 
     public static void main(String[] args)  {
-        Thread mainThread = new Thread(new App());
-        mainThread.start();
+        Thread thread = new Thread(new App());
+        thread.setName("Main Thread");
+        thread.setPriority(Thread.MAX_PRIORITY);
+        thread.run();
     }
 
     /**
@@ -132,6 +134,7 @@ public class App extends JFrame implements Runnable{
             }
             case GAME -> {
                 remove(gamePanel);
+                gamePanel.stopAllThread();
                 gamePanel = null;
             }
             case MAPSETTING -> {
@@ -158,7 +161,7 @@ public class App extends JFrame implements Runnable{
                 gamechoicePane = null;
             }
         }
-    }
+        System.gc();    }
 
     /**
      * replaces the current JPanel with another
