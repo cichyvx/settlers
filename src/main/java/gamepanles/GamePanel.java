@@ -28,9 +28,12 @@ public class GamePanel extends DefaultPanel{
     private int selected = 0;
     private boolean debug = false;
     private DebugingObject debugingObject;
+    private boolean RUNNABLE;
+    BufferedImage mapImage;
 
     public GamePanel(int width, int height, int mapWidth, int mapHeight, Map map){
         super();
+        RUNNABLE = true;
         this.setSize(width, height);
         this.WIDTH = width;
         this.HEIGHT = height;
@@ -48,6 +51,8 @@ public class GamePanel extends DefaultPanel{
         transX = 0;
         transY = 0;
         point = new Point();
+        mapImage = test();
+        painer.start();
     }
 
     private BufferedImage test(){
@@ -101,18 +106,19 @@ public class GamePanel extends DefaultPanel{
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        g2d.drawImage(test(), 0, 0, WIDTH, HEIGHT, null);
+        g2d.drawImage(mapImage, 0, 0, WIDTH, HEIGHT, null);
         g2d.dispose();
         //g2d.drawImage(image, 0, 0, WIDTH, HEIGHT, null);
 
     }
 
     private void setTranslation(int rightWise, int upWise) {
-        if (upWise > 0) transY += 2;
-        if (upWise < 0) transY -= 2;
+        final int transSped = 10;
+        if (upWise > 0) transY += transSped;
+        if (upWise < 0) transY -= transSped;
 
-        if (rightWise > 0) transX += 2;
-        if (rightWise < 0) transX -= 2;
+        if (rightWise > 0) transX += transSped;
+        if (rightWise < 0) transX -= transSped;
 
         if(-transX + App.getDimension().width > map.getWIDTH() * App.sWidth) transX = App.getDimension().width - (map.getWIDTH() * App.sWidth);
         if(transX > 0) transX = 0;
@@ -205,4 +211,26 @@ public class GamePanel extends DefaultPanel{
             }
         }
     });
+
+    Thread painer = new Thread(() ->{
+        while (RUNNABLE){
+            mapImage = test();
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    });
+
+    public void stopAllThread(){
+        RUNNABLE = false;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        RUNNABLE = false;
+        super.finalize();
+    }
+
 }
