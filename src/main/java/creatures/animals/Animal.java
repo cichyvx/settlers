@@ -10,18 +10,20 @@ import java.util.Random;
 
 public interface Animal extends SettlerDebuger {
 
+    int COW = 1;
+    int RABBIT = 2;
+
     /**
      * returns the Animal associated with the search id
      * @param selected ID of the animal you are looking for
      * @return animal assigned to the search id (if the id does not match the rare animal, Cow will be returned)
      */
     static Animal getAnimal(int selected) {
-        switch (selected){
-            case 1:
-                return new Cow(0,0,0,0);
-            default:
-                return new Cow(0,0,0,0);
-        }
+        return switch (selected) {
+            case COW -> new Cow(0, 0, 0, 0);
+            case RABBIT -> new Rabbit(0, 0, 0, 0);
+            default -> null;
+        };
     }
 
     /**
@@ -30,12 +32,11 @@ public interface Animal extends SettlerDebuger {
      * @return animal assigned to the search name (if the id does not match the rare animal, Cow will be returned)
      */
     static Animal getAnimal(String name) {
-        switch (name){
-            case "COW":
-                return new Cow(0,0,0,0);
-            default:
-                return new Cow(0,0,0,0);
-        }
+        return switch (name) {
+            case "COW" -> new Cow(0, 0, 0, 0);
+            case "RABBIT" -> new Rabbit(0,0,0,0);
+            default -> null;
+        };
     }
 
     /**
@@ -43,7 +44,7 @@ public interface Animal extends SettlerDebuger {
      * @returns any random animal
      */
     static Animal getRandomAnimal() {
-        return getAnimal(Math.abs(new Random().nextInt(getAnimalsCount() ) ));
+        return getAnimal(Math.abs(new Random().nextInt(getAnimalsCount() ) + 1 ));
     }
 
     /**
@@ -122,7 +123,7 @@ public interface Animal extends SettlerDebuger {
      * @return number of animal types
      */
     static int getAnimalsCount(){
-        return 1;
+        return 2;
     }
 
     /**

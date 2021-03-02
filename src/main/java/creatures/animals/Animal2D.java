@@ -183,6 +183,9 @@ public abstract class Animal2D implements Animal, SettlerDebuger {
             list.add(new PlantStructure());
             list.add(new BerriesStructure());
         }
+        else if(this.getClass().equals(Rabbit.class)){
+            list.add(new PlantStructure());
+        }
         return list;
     }
 
