@@ -109,7 +109,6 @@ public class DefaultTitle implements Title, SettlerDebuger {
         Random r = new Random();
         int rand = list.get(r.nextInt(list.size()));
         structure = Structure2D.getStructure(rand);
-        System.out.println(rand);
     }
 
     @Override
